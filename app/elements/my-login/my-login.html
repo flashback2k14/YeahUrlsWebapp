@@ -1,0 +1,96 @@
+<dom-module id="my-login">
+  <style>
+    :host {
+      display: block;
+    }
+
+    input {
+      width: 295px;
+    }
+
+    #btnLogin {
+      background: #009688;
+      color: #f9f9f9;
+    }
+  </style>
+  <template>
+    <label for="txtEmailaddress">Email:</label><br/>
+    <input id="txtEmailaddress" type="email" value="{{emailAddress::input}}" />
+    <br/><hr/>
+    <label for="txtPassword">Password:</label><br/>
+    <input id="txtPassword" type="password" value="{{password::input}}" />
+    <br/><hr/>
+    <paper-button id="btnLogin" on-click="submitLogin">Login</paper-button>
+  </template>
+</dom-module>
+
+<script>
+  (function() {
+    Polymer({
+      is: 'my-login',
+
+      properties: {
+        emailAddress: {
+          type: String,
+          value: '',
+          notify: true
+        },
+        password: {
+          type: String,
+          value: '',
+          notify: true
+        }
+      },
+
+      clearInputs: function() {
+        this.$.txtEmailaddress.value = '';
+        this.$.txtPassword.value = '';
+      },
+
+      routeTo: function(id, expireDate, route) {
+        var app = document.querySelector('#app');
+        app.setUserId(id);
+        app.setExpiresDate(expireDate);
+        app.route = route;
+        this.clearInputs();
+        this.fire('on-refresh-call');
+      },
+
+      showInfoToast: function(text, color) {
+        var infoToast = document.querySelector('#info-toast');
+        infoToast.text = text;
+        infoToast.style.background = color;
+        infoToast.toggle();
+      },
+
+      authWithPassword: function(userObj) {
+        return new Promise(function(resolve, reject) {
+          var rootRef = new Firebase('https://yeah-url-extension.firebaseio.com/');
+          rootRef.authWithPassword(userObj, function onAuth(err, user) {
+            if (err) reject(err);
+            if (user) resolve(user);
+          });
+        });
+      },
+
+      submitLogin: function() {
+        var emailAddress = this.$.txtEmailaddress.value;
+        var password = this.$.txtPassword.value;
+        var that = this;
+
+        var user = {
+          "email": emailAddress,
+          "password": password
+        };
+
+        this.authWithPassword(user).then(function(user) {
+          var userId = user.uid;
+          var expireDate = user.expires;
+          that.routeTo(userId, expireDate, 'overview');
+        }).catch(function(err) {
+          that.showInfoToast('Error Code: ' + err.code + ' Message: ' + err.message, 'RED');
+        });
+      }
+    });
+  })();
+</script>

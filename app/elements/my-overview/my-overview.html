@@ -1,0 +1,186 @@
+<dom-module id="my-overview">
+  <style>
+    :host {
+      display: block;
+    }
+    #elOverview {
+      height: 540px;
+      margin: 10px;
+      overflow: auto;
+    }
+    #fab {
+      position: absolute !important;
+      top: 40px;
+      right: 40px;
+      background-color: #FF5722;
+      z-index: 15;
+    }
+    #fabCard {
+      position: absolute !important;
+      top: 43px;
+      right: 30px;
+      background-color: #FF5722;
+      z-index: 15;
+    }
+    #collectionAllCard {
+      margin-left: 5px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      width: 98%;
+    }
+    #pmAllCard {
+      margin-top: 5px;
+      padding: 10px;
+    }
+    #collectionCard {
+      margin-top: 10px;
+    }
+    paper-input {
+      margin-left: 15px;
+      margin-right: 40px;
+      width: 50%;
+    }
+    paper-toolbar {
+      word-wrap: break-word;
+    }
+    p{
+      padding-left: 10px;
+      padding-bottom: 5px;
+      margin-top: 8px;
+      margin-bottom: 5px;
+      width: 90%;
+    }
+    a {
+      word-wrap: break-word;
+      margin: 10px;
+      padding: 10px;
+    }
+  </style>
+  <template>
+    <paper-fab id="fab" mini icon="refresh" on-click="reloadOverview"></paper-fab>
+
+    <paper-input label="Search:" type="text" value="{{searchStr}}"></paper-input>
+
+    <div id="elOverview">
+      <template is="dom-repeat" items="{{urlCollection}}" as="userObj">
+        <div id="collectionAllCard">
+          <paper-material id="pmAllCard" elevation="1">
+            <template is="dom-repeat" items="{{userObj}}">
+              <template is="dom-if" if="{{item.id}}">
+                <template is="dom-if" if="{{searchForItems(item, searchStr)}}">
+                  <paper-material id="collectionCard" elevation="1">
+                    <paper-toolbar>
+                      <h3>Date:&nbsp;</h3><h3><span>{{item.date}}</span></h3>
+                      <h3>,&nbsp;</h3><h3><span>{{item.time}}</span></h3>
+                    </paper-toolbar>
+                    <paper-fab id="fabCard" mini icon="clear" on-click="remove"></paper-fab>
+                    <p><a href="{{item.value}}" target="_blank">{{item.value}}</a></p>
+                  </paper-material>
+                </template>
+              </template>
+            </template>
+          </paper-material>
+        </div>
+      </template>
+    </div>
+
+  </template>
+</dom-module>
+
+<script>
+  (function() {
+    Polymer({
+      is: 'my-overview',
+
+      routeTo: function(route) {
+        document.querySelector('#app').route = route;
+      },
+
+      showInfoToast: function(text, color) {
+        var infoToast = document.querySelector('#info-toast');
+        infoToast.text = text;
+        infoToast.style.background = color;
+        infoToast.toggle();
+      },
+
+      reloadOverview: function() {
+        var app = document.querySelector('#app');
+        var id = app.getUserId();
+        var expireDate = app.getExpiresDate();
+
+        if ((id === null) || (expireDate === null)) {
+          this.routeTo('login');
+        }
+
+        var that = this;
+        var rootRef = new Firebase('https://yeah-url-extension.firebaseio.com/' + id + '/urlcollector');
+        rootRef.on('value', function(snapshot) {
+
+          that.urlCollection = [];
+
+          snapshot.forEach(function(child) {
+            var urlObj = child.val();
+            for(var i in urlObj) {
+              urlObj[i].objId = child.key();
+            }
+            that.push('urlCollection', urlObj);
+          });
+        });
+      },
+
+      removeFromFirebase: function(id, objId) {
+        return new Promise(function(resolve, reject) {
+
+          var userId = document.querySelector('#app').getUserId();
+          var ref = new Firebase('https://yeah-url-extension.firebaseio.com/' + userId + '/urlcollector/' + objId + '/' + id);
+
+          var onComplete = function(error) {
+            if (error) {
+              reject(error);
+            } else {
+              resolve({'value':'remove successful'});
+            }
+          };
+
+          ref.remove(onComplete);
+        });
+      },
+
+      remove: function(e) {
+        var model = e.model;
+        var urlObj = model.item;
+
+        var id = (urlObj.id - 1);
+        var objId = urlObj.objId;
+
+        var that = this;
+        this.removeFromFirebase(id, objId)
+          .then(function(obj) {
+            that.showInfoToast(obj.value, 'Green');
+            that.reloadOverview();
+          })
+          .catch(function(err) {
+            that.showInfoToast('Error Code: ' + err.code + ' Message: ' + err.message, 'RED');
+          });
+      },
+
+      searchForItems: function(item, searchStr) {
+        if (searchStr !== undefined) {
+          if (searchStr.length === 0) return item;
+          else return item.value.toLowerCase().match(searchStr.toLowerCase());
+        } else {
+          return this.urlCollection;
+        }
+      },
+
+      listeners: {
+        'on-refresh-call': 'reloadOverview'
+      },
+
+      ready: function() {
+        this.urlCollection = [];
+        this.reloadOverview();
+      }
+    });
+  })();
+</script>
