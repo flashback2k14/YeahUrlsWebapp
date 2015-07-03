@@ -1,0 +1,9 @@
+{
+  "firebase": "yeah-url-extension",
+  "public": "dist",
+  "ignore": [
+    "firebase.json",
+    "**/.*",
+    "**/node_modules/**"
+  ]
+}
