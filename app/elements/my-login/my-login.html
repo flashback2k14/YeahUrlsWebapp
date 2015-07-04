@@ -53,7 +53,7 @@
         app.setExpiresDate(expireDate);
         app.route = route;
         this.clearInputs();
-        this.fire('on-refresh-call');
+        this.fire('call-overview-refresh', {});
       },
 
       showInfoToast: function(text, color) {

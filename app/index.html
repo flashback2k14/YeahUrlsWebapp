@@ -96,7 +96,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <paper-toolbar>
                   <h1 class="paper-font-display1"><span>Overview</span></h1>
                 </paper-toolbar>
-                <my-overview id="elOverview"></my-overview>
+                <my-overview id="elOverview"
+                             on-call-overview-refresh="reloadOverview">
+                </my-overview>
               </paper-material>
             </section>
           </iron-pages>

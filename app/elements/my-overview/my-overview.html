@@ -4,7 +4,7 @@
       display: block;
     }
     #elOverview {
-      height: 540px;
+      height: 420px;
       margin: 10px;
       overflow: auto;
     }
@@ -27,24 +27,9 @@
       margin-right: 40px;
       width: 50%;
     }
-    @media all and (min-width: 0) and (max-width: 360px) and (orientation: portrait) {
-      #fab {
-        position: absolute !important;
-        top: 30px;
-        right: 20px;
-        background-color: #FF5722;
-        z-index: 15;
-      }
-      #fabCard {
-        position: absolute !important;
-        top: 33px;
-        right: 7px;
-        background-color: #FF5722;
-        z-index: 15;
-      }
-      paper-input {
-        width: 90%;
-      }
+    paper-checkbox{
+      margin-left: 15px;
+      margin-right: 40px;
     }
     #collectionAllCard {
       margin-left: 5px;
@@ -71,14 +56,40 @@
     }
     a {
       word-wrap: break-word;
-      margin: 10px;
-      padding: 10px;
+      margin: 10px 10px 0 0;
+      padding: 10px 10px 0 0;
+    }
+    @media all and (min-width: 0) and (max-width: 360px) and (orientation: portrait) {
+      #elOverview {
+        height: 400px;
+      }
+      #fab {
+        position: absolute !important;
+        top: 30px;
+        right: 20px;
+        background-color: #FF5722;
+        z-index: 15;
+      }
+      #fabCard {
+        position: absolute !important;
+        top: 33px;
+        right: 7px;
+        background-color: #FF5722;
+        z-index: 15;
+      }
+
+      paper-input {
+        width: 90%;
+      }
     }
   </style>
   <template>
     <paper-fab id="fab" mini icon="refresh" on-click="reloadOverview"></paper-fab>
 
-    <paper-input label="Search:" type="text" value="{{searchStr}}"></paper-input>
+    <div>
+      <paper-input label="Search:" type="text" value="{{searchStr}}"></paper-input>
+      <paper-checkbox id="chbKeywords">Keywords</paper-checkbox>
+    </div>
 
     <div id="elOverview">
       <template is="dom-repeat" items="{{urlCollection}}" as="userObj">
@@ -94,6 +105,7 @@
                     </paper-toolbar>
                     <paper-fab id="fabCard" mini icon="clear" on-click="remove"></paper-fab>
                     <p><a href="{{item.value}}" target="_blank">{{item.value}}</a></p>
+                    <p><strong>{{item.keywords}}</strong></p>
                   </paper-material>
                 </template>
               </template>
@@ -140,7 +152,9 @@
           snapshot.forEach(function(child) {
             var urlObj = child.val();
             for(var i in urlObj) {
-              urlObj[i].objId = child.key();
+              if (i.hasOwnProperty('objId')){
+                urlObj[i].objId = child.key();
+              }
             }
             that.push('urlCollection', urlObj);
           });
@@ -184,16 +198,21 @@
       },
 
       searchForItems: function(item, searchStr) {
+        var useKeywords = this.$.chbKeywords.checked;
+
         if (searchStr !== undefined) {
           if (searchStr.length === 0) return item;
-          else return item.value.toLowerCase().match(searchStr.toLowerCase());
+          else {
+            if (useKeywords) return item.keywords.toLowerCase().match(searchStr.toLowerCase());
+            else return item.value.toLowerCase().match(searchStr.toLowerCase());
+          }
         } else {
           return this.urlCollection;
         }
       },
 
       listeners: {
-        'on-refresh-call': 'reloadOverview'
+        'on-call-overview-refresh': this.reloadOverview
       },
 
       ready: function() {
