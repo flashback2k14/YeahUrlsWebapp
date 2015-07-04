@@ -3,7 +3,7 @@
     :host {
       display: block;
     }
-    #elOverview {
+    #divOverview {
       height: 420px;
       margin: 10px;
       overflow: auto;
@@ -60,7 +60,7 @@
       padding: 10px 10px 0 0;
     }
     @media all and (min-width: 0) and (max-width: 360px) and (orientation: portrait) {
-      #elOverview {
+      #divOverview {
         height: 400px;
       }
       #fab {
@@ -77,21 +77,22 @@
         background-color: #FF5722;
         z-index: 15;
       }
-
       paper-input {
         width: 90%;
+      }
+    }
+    @media all and (min-width: 1601px) and (max-width: 1920px) {
+      #divOverview {
+        height: 580px;
       }
     }
   </style>
   <template>
     <paper-fab id="fab" mini icon="refresh" on-click="reloadOverview"></paper-fab>
+    <paper-input label="Search:" type="text" value="{{searchStr}}"></paper-input>
+    <paper-checkbox id="chbKeywords">Keywords</paper-checkbox>
 
-    <div>
-      <paper-input label="Search:" type="text" value="{{searchStr}}"></paper-input>
-      <paper-checkbox id="chbKeywords">Keywords</paper-checkbox>
-    </div>
-
-    <div id="elOverview">
+    <div id="divOverview">
       <template is="dom-repeat" items="{{urlCollection}}" as="userObj">
         <div id="collectionAllCard">
           <paper-material id="pmAllCard" elevation="1">
@@ -179,6 +180,12 @@
         });
       },
 
+      clearListview: function() {
+        var listView = document.querySelector('#collectionAllCard');
+        listView.innerHTML = '';
+        this.routeTo('login');
+      },
+
       remove: function(e) {
         var model = e.model;
         var urlObj = model.item;
@@ -211,9 +218,9 @@
         }
       },
 
-      listeners: {
-        'on-call-overview-refresh': this.reloadOverview
-      },
+//      listeners: {
+//        'on-call-overview-refresh': this.reloadOverview
+//      },
 
       ready: function() {
         this.urlCollection = [];

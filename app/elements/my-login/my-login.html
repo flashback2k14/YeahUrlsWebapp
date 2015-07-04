@@ -15,10 +15,10 @@
   </style>
   <template>
     <label for="txtEmailaddress">Email:</label><br/>
-    <input id="txtEmailaddress" type="email" value="{{emailAddress::input}}" />
+    <input id="txtEmailaddress" type="email" value="{{emailAddress::input}}" required autocomplete="on" />
     <br/><hr/>
     <label for="txtPassword">Password:</label><br/>
-    <input id="txtPassword" type="password" value="{{password::input}}" />
+    <input id="txtPassword" type="password" value="{{password::input}}" required autocomplete="on" />
     <br/><hr/>
     <paper-button id="btnLogin" on-click="submitLogin">Login</paper-button>
   </template>
@@ -49,11 +49,13 @@
 
       routeTo: function(id, expireDate, route) {
         var app = document.querySelector('#app');
+        var overview = document.querySelector('#elOverview');
         app.setUserId(id);
         app.setExpiresDate(expireDate);
         app.route = route;
         this.clearInputs();
-        this.fire('call-overview-refresh', {});
+        overview.reloadOverview();
+//        this.fire('call-overview-refresh', {});
       },
 
       showInfoToast: function(text, color) {

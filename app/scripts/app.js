@@ -11,26 +11,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   var app = document.querySelector('#app');
   var infoToast = null;
+  var overview = null;
   var userId = undefined;
   var expiresDate = undefined;
+  var docReady = false;
 
   // Listen for template bound event to know when bindings
   // have resolved and content has been stamped to the page
   app.addEventListener('dom-change', function() {
     console.log('Yeah! URLs Webapp is ready to perform awesome stuff!');
     infoToast = document.querySelector('#info-toast');
+    overview = document.querySelector('#elOverview');
   });
 
   // See https://github.com/Polymer/polymer/issues/1381
   window.addEventListener('WebComponentsReady', function() {
     // imports are loaded and elements have been registered
+    docReady = true;
   });
 
   // Close drawer after menu item is selected if drawerPanel is narrow
   app.onMenuSelect = function() {
     var drawerPanel = document.querySelector('#paperDrawerPanel');
-    if (drawerPanel.narrow) {
-      drawerPanel.closeDrawer();
+    if (docReady) {
+      if (drawerPanel.narrow) {
+        drawerPanel.closeDrawer();
+      }
     }
   };
 
@@ -45,6 +51,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     window.localStorage.removeItem('userId');
     window.localStorage.removeItem('expiresDate');
+
+    overview.clearListview();
   };
 
   function calcCurrentExpiresDate() {
