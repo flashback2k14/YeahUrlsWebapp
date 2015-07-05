@@ -59,7 +59,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <iron-icon icon="social:person-outline"></iron-icon>
             <span>Login</span>
           </a>
-
           <a data-route="overview" href="/overview">
             <iron-icon icon="list"></iron-icon>
             <span>Overview</span>
@@ -87,7 +86,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <paper-toolbar>
                   <h1 class="paper-font-display1"><span>Login</span></h1>
                 </paper-toolbar>
-                <my-login id="elLogin"></my-login>
+                <my-login id="elLogin"
+                          on-call-overview-refresh="callRefreshOverview"></my-login>
               </paper-material>
             </section>
 
@@ -96,9 +96,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 <paper-toolbar>
                   <h1 class="paper-font-display1"><span>Overview</span></h1>
                 </paper-toolbar>
-                <!--<my-overview id="elOverview"-->
-                             <!--on-call-overview-refresh="reloadOverview">
-                </my-overview>-->
                 <my-overview id="elOverview">
                 </my-overview>
               </paper-material>

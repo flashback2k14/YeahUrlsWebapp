@@ -30,6 +30,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     docReady = true;
   });
 
+  function calcCurrentExpiresDate() {
+    return Math.round(new Date().getTime() / 1000.0);
+  }
+
   // Close drawer after menu item is selected if drawerPanel is narrow
   app.onMenuSelect = function() {
     var drawerPanel = document.querySelector('#paperDrawerPanel');
@@ -54,10 +58,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     overview.clearListview();
   };
-
-  function calcCurrentExpiresDate() {
-    return Math.round(new Date().getTime() / 1000.0);
-  }
 
   app.setUserId = function(value) {
     if (userId !== value) {
@@ -86,4 +86,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
     return expiresDate;
   };
+
+  app.callRefreshOverview = function() {
+    overview.reloadOverview();
+  }
 })(document);

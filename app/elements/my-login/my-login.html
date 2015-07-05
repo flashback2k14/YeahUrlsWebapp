@@ -49,13 +49,11 @@
 
       routeTo: function(id, expireDate, route) {
         var app = document.querySelector('#app');
-        var overview = document.querySelector('#elOverview');
         app.setUserId(id);
         app.setExpiresDate(expireDate);
         app.route = route;
         this.clearInputs();
-        overview.reloadOverview();
-//        this.fire('call-overview-refresh', {});
+        this.fire('call-overview-refresh', {});
       },
 
       showInfoToast: function(text, color) {
