@@ -93,22 +93,20 @@
     <paper-checkbox id="chbKeywords">Keywords</paper-checkbox>
 
     <div id="divOverview">
-      <template is="dom-repeat" items="{{urlCollection}}" as="userObj">
+      <template id="templateOverview" is="dom-repeat" items="{{urlCollection}}" as="userObj">
         <div id="collectionAllCard">
           <paper-material id="pmAllCard" elevation="1">
             <template is="dom-repeat" items="{{userObj}}">
-              <template is="dom-if" if="{{item.id}}">
-                <template is="dom-if" if="{{searchForItems(item, searchStr)}}">
-                  <paper-material id="collectionCard" elevation="1">
-                    <paper-toolbar>
-                      <h3>Date:&nbsp;</h3><h3><span>{{item.date}}</span></h3>
-                      <h3>,&nbsp;</h3><h3><span>{{item.time}}</span></h3>
-                    </paper-toolbar>
-                    <paper-fab id="fabCard" mini icon="clear" on-click="remove"></paper-fab>
-                    <p><a href="{{item.value}}" target="_blank">{{item.value}}</a></p>
-                    <p><strong>{{item.keywords}}</strong></p>
-                  </paper-material>
-                </template>
+              <template is="dom-if" if="{{searchForItems(item, searchStr)}}">
+                <paper-material id="collectionCard" elevation="1">
+                  <paper-toolbar>
+                    <h3>Date:&nbsp;</h3><h3><span>{{item.date}}</span></h3>
+                    <h3>,&nbsp;</h3><h3><span>{{item.time}}</span></h3>
+                  </paper-toolbar>
+                  <paper-fab id="fabCard" mini icon="clear" on-click="remove"></paper-fab>
+                  <p><a href="{{item.value}}" target="_blank">{{item.value}}</a></p>
+                  <p><strong>{{item.keywords}}</strong></p>
+                </paper-material>
               </template>
             </template>
           </paper-material>
@@ -142,6 +140,7 @@
 
         if ((id === null) || (expireDate === null)) {
           this.routeTo('login');
+          return;
         }
 
         var that = this;
@@ -152,10 +151,8 @@
 
           snapshot.forEach(function(child) {
             var urlObj = child.val();
-            for(var i in urlObj) {
-              if (i.hasOwnProperty('objId')){
-                urlObj[i].objId = child.key();
-              }
+            for(var i = 0; i < urlObj.length; i++) {
+              urlObj[i].objId = child.key();
             }
             that.push('urlCollection', urlObj);
           });

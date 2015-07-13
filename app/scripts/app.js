@@ -12,8 +12,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   var app = document.querySelector('#app');
   var infoToast = null;
   var overview = null;
-  var userId = undefined;
-  var expiresDate = undefined;
+  var userId = null;
+  var expiresDate = null;
   var docReady = false;
 
   // Listen for template bound event to know when bindings
