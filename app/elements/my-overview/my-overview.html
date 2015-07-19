@@ -96,24 +96,29 @@
       <template id="templateOverview" is="dom-repeat" items="{{urlCollection}}" as="userObj">
         <div id="collectionAllCard">
           <paper-material id="pmAllCard" elevation="1">
-            <template is="dom-repeat" items="{{userObj}}">
-              <template is="dom-if" if="{{searchForItems(item, searchStr)}}">
-                <paper-material id="collectionCard" elevation="1">
-                  <paper-toolbar>
-                    <h3>Date:&nbsp;</h3><h3><span>{{item.date}}</span></h3>
-                    <h3>,&nbsp;</h3><h3><span>{{item.time}}</span></h3>
-                  </paper-toolbar>
-                  <paper-fab id="fabCard" mini icon="clear" on-click="remove"></paper-fab>
-                  <p><a href="{{item.value}}" target="_blank">{{item.value}}</a></p>
-                  <p><strong>{{item.keywords}}</strong></p>
-                </paper-material>
+            <template is="dom-repeat" items="{{userObj}}" as="item">
+
+              <template is="dom-if" if="{{hasItemId(item)}}">
+
+                <template is="dom-if" if="{{searchForItems(item, searchStr)}}">
+                  <paper-material id="collectionCard" elevation="1">
+                    <paper-toolbar>
+                      <h3>Date:&nbsp;</h3><h3><span>{{item.date}}</span></h3>
+                      <h3>,&nbsp;</h3><h3><span>{{item.time}}</span></h3>
+                    </paper-toolbar>
+                    <paper-fab id="fabCard" mini icon="clear" on-click="remove"></paper-fab>
+                    <p><a href="{{item.value}}" target="_blank">{{item.value}}</a></p>
+                    <p><strong>{{item.keywords}}</strong></p>
+                  </paper-material>
+                </template>
+
               </template>
+
             </template>
           </paper-material>
         </div>
       </template>
     </div>
-
   </template>
 </dom-module>
 
@@ -150,13 +155,24 @@
           that.urlCollection = [];
 
           snapshot.forEach(function(child) {
-            var urlObj = child.val();
-            for(var i = 0; i < urlObj.length; i++) {
-              urlObj[i].objId = child.key();
-            }
-            that.push('urlCollection', urlObj);
+            var urlObjs = child.val();
+            var objId = child.key();
+
+            urlObjs = that.addObjIdToUrlCollection(urlObjs, objId);
+            that.push('urlCollection', urlObjs);
           });
         });
+      },
+
+      addObjIdToUrlCollection: function(urlColl, objId) {
+        for (var i = 0; i < urlColl.length; i++) {
+          if (typeof urlColl[i] !== 'undefined') {
+            if (!urlColl[i].hasOwnProperty('objId')) {
+              urlColl[i].objId = objId;
+            }
+          }
+        }
+        return urlColl;
       },
 
       removeFromFirebase: function(id, objId) {
@@ -166,11 +182,8 @@
           var ref = new Firebase('https://yeah-url-extension.firebaseio.com/' + userId + '/urlcollector/' + objId + '/' + id);
 
           var onComplete = function(error) {
-            if (error) {
-              reject(error);
-            } else {
-              resolve({'value':'remove successful'});
-            }
+            if (error) reject(error);
+            else resolve({'value':'remove successful'});
           };
 
           ref.remove(onComplete);
@@ -199,6 +212,10 @@
           .catch(function(err) {
             that.showInfoToast('Error Code: ' + err.code + ' Message: ' + err.message, 'RED');
           });
+      },
+
+      hasItemId: function(item) {
+        return item.hasOwnProperty('id');
       },
 
       searchForItems: function(item, searchStr) {
