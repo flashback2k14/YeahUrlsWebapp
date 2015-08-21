@@ -48,10 +48,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <span id="browser-sync-binding"></span>
   <template is="dom-bind" id="app">
     <paper-drawer-panel id="paperDrawerPanel" force-narrow>
-      <paper-header-panel drawer mode="standard">
+      <paper-header-panel id="paperSidebarPanel" drawer mode="standard">
         <!-- Drawer Toolbar -->
-        <paper-toolbar>
-          <span class="paper-font-display">Menu</span>
+        <paper-toolbar id="drawerToolbar" class="tall">
+          <div class="middle">
+            <div class="user-info-container">
+              <img id="imgUserProfilePicture" class="user-info-picture circular" src="images/touch/icon-128x128.png" alt="User Profile Picture" />
+              <div id="tbUserName" class="user-info-username">Your Username...</div>
+              <div id="tbUserEmailAddress" class="user-info-emailaddress">Your Emailaddress...</div>
+            </div>
+          </div>
         </paper-toolbar>
         <!-- Drawer Content -->
         <paper-menu class="list" attr-for-selected="data-route" selected="{{route}}" on-iron-select="onMenuSelect">
@@ -72,9 +78,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
           <span class="flex"></span>
           <!-- Toolbar icons-->
-          <paper-icon-button id="btnLogout" icon="eject" on-click="showLogoutMessage"></paper-icon-button>
+          <paper-icon-button id="btnLogout" icon="eject" on-click="logoutUser"></paper-icon-button>
           <!-- Application name -->
-          <div class="middle paper-font-display2 app-name">Yeah! URLs Webapp</div>
+          <div class="middle paper-font-display1 app-name">Yeah! URLs Webapp</div>
           <!-- Application sub title -->
           <div class="bottom title"></div>
         </paper-toolbar>
@@ -82,21 +88,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <div class="content">
           <iron-pages attr-for-selected="data-route" selected="{{route}}">
             <section data-route="login">
-              <paper-material id="pmLogin" elevation="1">
-                <paper-toolbar>
-                  <h1 class="paper-font-display1"><span>Login</span></h1>
-                </paper-toolbar>
+              <paper-material id="pmLogin" elevation="5">
                 <my-login id="elLogin"
-                          on-call-overview-refresh="callRefreshOverview"></my-login>
+                          on-login-successful="handleLoginSuccessful"
+                          on-login-failed="handleLoginFailed">
+                </my-login>
               </paper-material>
             </section>
 
             <section data-route="overview">
-              <paper-material id="pmOverview" elevation="1">
-                <paper-toolbar>
-                  <h1 class="paper-font-display1"><span>Overview</span></h1>
-                </paper-toolbar>
-                <my-overview id="elOverview">
+              <paper-material id="pmOverview" elevation="5">
+                <my-overview id="elOverview"
+                             on-login-expired="handleLoginExpired"
+                             on-remove-item-successful="handleRemoveItemSuccessful"
+                             on-remove-item-failed="handleRemoveItemFailed">
                 </my-overview>
               </paper-material>
             </section>
@@ -106,14 +111,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </paper-drawer-panel>
 
     <paper-toast id="info-toast"
-                 duration="1500"
+                 duration="3000"
                  text="Hello, World!">
     </paper-toast>
   </template>
   <!-- build:js scripts/app.js -->
   <script src="scripts/app.js"></script>
+  <script src="scripts/user-info.js"></script>
+  <script src="scripts/util.js"></script>
   <!-- endbuild-->
   <!--firebase-->
-  <script src='https://cdn.firebase.com/js/client/2.2.7/firebase.js'></script>
+  <script src='https://cdn.firebase.com/js/client/2.2.9/firebase.js'></script>
 </body>
 </html>

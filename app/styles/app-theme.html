@@ -10,34 +10,39 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <style is="custom-style">
   /* Application theme */
   :root {
-    --dark-primary-color:       #00796B;
-    --default-primary-color:    #009688;
-    --light-primary-color:      #B2DFDB;
-    --text-primary-color:       #FFFFFF;
-    --accent-color:             #FF5722;
-    --primary-background-color: #B2DFDB;
-    --primary-text-color:       #212121;
+    --primary-background-color: #353535;
+    --background-color:         #081E3F;
+
+    --dark-primary-color:       #083D56;
+    --default-primary-color:    #0E5F76;
+    --light-primary-color:      #7DB9B3;
+
+    --text-primary-color:       #F4F4F4;
+    --accent-color:             #53C0A2;
+
+    --primary-text-color:       #F4F4F4;
     --secondary-text-color:     #727272;
+
     --disabled-text-color:      #BDBDBD;
-    --divider-color:            #B6B6B6;
+    --divider-color:            #D8D7C3;
 
     /* Components */
     /* paper-drawer-panel */
-    --drawer-menu-color:           #009688;
-    --drawer-border-color:         1px solid #00796B;
-    --drawer-toolbar-border-color: 1px solid rgba(0, 0, 0, 0.22);
+    --drawer-menu-color:           var(--background-color);
+    --drawer-border-color:         1px solid var(--dark-primary-color);
+    --drawer-toolbar-border-color: 1px solid var(--dark-background-color);
     /* paper-menu */
-    --paper-menu-background-color: #fff;
-    --menu-link-color: #111111;
+    --paper-menu-background-color: var(--background-color);
+    --menu-link-color: var(--light-primary-color);
   }
 
   /* General styles */
   paper-material {
-    border-radius: 2px;
+    border-radius: 4px;
     height: 100%;
     width: calc(98.66% - 16px);
     margin: 16px auto;
-    background: white;
+    background: var(--divider-color);
   }
 
   paper-menu iron-icon {
@@ -46,7 +51,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   .paper-menu > .iron-selected {
-    color: var(--default-primary-color);
+    color: var(--accent-color);
   }
 
   paper-menu a {
@@ -71,6 +76,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     padding: 0 16px;
   }
 
+  #paperSidebarPanel {
+    background-color: var(--background-color);
+  }
+
   #mainToolbar .middle {
     margin-left: 48px;
   }
@@ -81,8 +90,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     margin-left: 48px;
   }
 
+  .paper-font-display1 {
+    font-size: 18px;
+  }
+
   /* custom index.html elements */
   #pmLogin {
+    margin-top: 100px;
     width: 340px;
     height: 280px;
   }
@@ -90,44 +104,71 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   #elLogin {
     width: 300px;
     height: 300px;
-    margin-left: 20px;
-    margin-top: 40px;
+    margin: 0;
+    padding: 0;
   }
 
   #pmOverview {
-    height: 600px;
-    max-height: 80%;
+    height: 80%;
+    max-height: 85%;
+  }
+
+  /*Custom Toolbar Menu*/
+  .user-info-container {
+    margin: 45px 10px 10px 0;
+  }
+  .user-info-picture {
+    padding: 5px;
+  }
+  .user-info-username {
+    padding: 5px;
+    font-size: medium;
+  }
+  .user-info-emailaddress{
+    padding: 5px;
+    font-size: x-small;
+    word-break: break-all;
+  }
+  .circular {
+    display: inline-block;
+    min-height: 80px;
+    height: 80px;
+    max-height: 80px;
+    min-width: 80px;
+    width: 80px;
+    max-width: 80px;
+    overflow: hidden;
+    -webkit-border-radius: 40px;
+    -moz-border-radius: 40px;
+    border-radius: 50%;
+    -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    -moz-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+    box-shadow: 0 0 8px rgba(0, 0, 0, .8);
   }
 
   /* Height of the scroll area */
   .content {
-    height: 600px;
+    height: 800px;
   }
 
   /* Breakpoints */
   /* Small */
   @media (max-width: 600px) {
-
     paper-material {
       width: calc(97.33% - 32px);
     }
-
     .paper-font-display1 {
       font-size: 18px;
     }
-
     .app-name {
       font-size: 26px;
     }
-
     #drawer .paper-toolbar {
       margin-left: 16px;
     }
-
     #overlay {
       min-width: 360px;
     }
-
     .bg {
       background: white;
     }
@@ -135,15 +176,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   /* Tablet+ */
   @media (min-width: 601px) {
-
     paper-material {
       width: calc(98% - 46px);
     }
-
     #drawer.paper-drawer-panel > [drawer] {
       border-right: 1px solid rgba(0, 0, 0, 0.14);
     }
-
     iron-pages {
       padding: 48px 62px;
     }
@@ -155,7 +193,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     #pmOverview {
       height: 550px;
     }
-
     .content {
       height: 400px;
     }
@@ -191,9 +228,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   /* desktop-xlarge */
   @media all and (min-width: 1601px) and (max-width: 1920px) {
     #pmOverview {
-      height: 750px;
+      height: 800px;
     }
-
     .content {
       height: 600px;
     }
