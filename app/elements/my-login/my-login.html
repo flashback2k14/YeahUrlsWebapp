@@ -3,25 +3,53 @@
     :host {
       display: block;
     }
-
-    input {
-      width: 295px;
+    .inputContainer {
+      width: 100%;
+      margin: 20px;
     }
-
+    paper-material {
+      width: 340px;
+    }
+    paper-toolbar {
+      width: 100%;
+    }
+    .inputs {
+      --paper-input-container-input-color: var(--dark-primary-color);
+    }
     #btnLogin {
-      margin-left: 0;
-      background: #009688;
-      color: #f9f9f9;
+      margin-top: 15px;
+      margin-right: 0;
+      background: var(--default-primary-color);
+      color: var(--text-primary-color);
+      float: right;
     }
   </style>
   <template>
-    <label for="txtEmailaddress">Email:</label><br/>
-    <input id="txtEmailaddress" type="email" value="{{emailAddress::input}}" required autocomplete="on" />
-    <br/><hr/>
-    <label for="txtPassword">Password:</label><br/>
-    <input id="txtPassword" type="password" value="{{password::input}}" required autocomplete="on" />
-    <br/><hr/>
-    <paper-button id="btnLogin" on-click="submitLogin">Login</paper-button>
+    <paper-material elevation="3">
+      <paper-toolbar>
+        <h1 class="paper-font-display1"><span>Login</span></h1>
+      </paper-toolbar>
+    </paper-material>
+    <div class="inputContainer">
+      <paper-input
+        class="inputs"
+        id="txtEmailaddress"
+        label="Emailaddress"
+        type="text"
+        value="{{emailAddress::input}}">
+      </paper-input>
+      <paper-input
+        class="inputs"
+        id="txtPassword"
+        label="Password"
+        type="password"
+        value="{{password::input}}">
+      </paper-input>
+      <paper-button
+        id="btnLogin"
+        on-click="submitLogin">Login
+      </paper-button>
+    </div>
   </template>
 </dom-module>
 
@@ -43,28 +71,14 @@
         }
       },
 
-      clearInputs: function() {
-        this.$.txtEmailaddress.value = '';
+      _clearInputs: function(clearBoth) {
+        if (clearBoth) {
+          this.$.txtEmailaddress.value = '';
+        }
         this.$.txtPassword.value = '';
       },
 
-      routeTo: function(id, expireDate, route) {
-        var app = document.querySelector('#app');
-        app.setUserId(id);
-        app.setExpiresDate(expireDate);
-        app.route = route;
-        this.clearInputs();
-        this.fire('call-overview-refresh', {});
-      },
-
-      showInfoToast: function(text, color) {
-        var infoToast = document.querySelector('#info-toast');
-        infoToast.text = text;
-        infoToast.style.background = color;
-        infoToast.toggle();
-      },
-
-      authWithPassword: function(userObj) {
+      _authWithPassword: function(userObj) {
         return new Promise(function(resolve, reject) {
           var rootRef = new Firebase('https://yeah-url-extension.firebaseio.com/');
           rootRef.authWithPassword(userObj, function onAuth(err, user) {
@@ -84,13 +98,15 @@
           'password': password
         };
 
-        this.authWithPassword(user).then(function(user) {
-          var userId = user.uid;
-          var expireDate = user.expires;
-          that.routeTo(userId, expireDate, 'overview');
-        }).catch(function(err) {
-          that.showInfoToast('Error Code: ' + err.code + ' Message: ' + err.message, 'RED');
-        });
+        this._authWithPassword(user)
+          .then(function(user) {
+            that._clearInputs(true);
+            that.fire('login-successful', user);
+          })
+          .catch(function(err) {
+            that._clearInputs(false);
+            that.fire('login-failed', err);
+          });
       }
     });
   })();
