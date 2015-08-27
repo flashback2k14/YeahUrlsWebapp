@@ -3,16 +3,32 @@
     :host {
       display: block;
     }
-    .searchContainer {
-      width: 90%;
-      @apply(--layout-horizontal);
+    @media all and (min-width: 0) and (max-width: 361px) and (orientation: portrait) {
+      #divOverview {
+        height: 530px;
+      }
+      #fabCard {
+        position: absolute !important;
+        top: 0;
+        right: 0;
+        z-index: 15;
+      }
+      paper-input {
+        width: 90%;
+      }
     }
-    .headline {
-      margin-right: 10px;
+    @media all and (min-width: 1601px) and (max-width: 1920px) {
+      #divOverview {
+        height: 710px;
+      }
+    }
+    .searchContainer {
+      width: 100%;
+      @apply(--layout-horizontal);
     }
     .searchInput {
       margin-top: 10px;
-      marign-left: 20px;
+      marign-left: 10px;
       margin-right: 5px;
       --paper-input-container-color: var(--text-primary-color);
       --paper-input-container-focus-color: var(--text-primary-color);
@@ -33,12 +49,6 @@
       height: 620px;
       margin: 10px;
       overflow: auto;
-    }
-    #fab {
-      position: absolute !important;
-      top: 40px;
-      right: 40px;
-      z-index: 15;
     }
     #fabCard {
       position: absolute !important;
@@ -80,6 +90,10 @@
       word-wrap: break-word;
       margin: 10px 10px 0 0;
       padding: 10px 10px 0 0;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
     }
     .with-tooltip {
       display: inline-block;
@@ -89,39 +103,11 @@
     .tooltip {
       --paper-tooltip-background: var(--accent-color);
     }
-    @media all and (min-width: 0) and (max-width: 360px) and (orientation: portrait) {
-      #divOverview {
-        height: 400px;
-      }
-      #fab {
-        position: absolute !important;
-        top: 30px;
-        right: 20px;
-        z-index: 15;
-      }
-      #fabCard {
-        position: absolute !important;
-        top: 33px;
-        right: 7px;
-        z-index: 15;
-      }
-      paper-input {
-        width: 90%;
-      }
-    }
-    @media all and (min-width: 1601px) and (max-width: 1920px) {
-      #divOverview {
-        height: 710px;
-      }
-    }
   </style>
   <template>
-    <paper-fab id="fab" mini icon="refresh" on-click="reloadOverview"></paper-fab>
-
     <paper-material elevation="3">
       <paper-toolbar>
         <div class="searchContainer">
-        <h1 class="headline paper-font-display1"><span>Overview</span></h1>
         <paper-input class="searchInput" id="txtSearch" label="Search" type="text" value="{{searchStr}}"></paper-input>
         <div class="with-tooltip">
           <paper-checkbox class="useKeywords" id="chbKeywords">Keywords</paper-checkbox>
@@ -166,10 +152,9 @@
 
       reloadOverview: function() {
         var id = UserInfo.get(UserInfo.USERID);
-        var expireDate = UserInfo.get(UserInfo.EXPIREDATE);
         var that = this;
 
-        if (Util.isUserLoginExpired(expireDate)) {
+        if (Util.isUserLoginExpired(UserInfo.get(UserInfo.EXPIREDATE))) {
           this.fire('login-expired');
           return;
         }
