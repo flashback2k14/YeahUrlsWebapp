@@ -1,11 +1,11 @@
-<dom-module id="my-overview">
+<dom-module id="my-notes">
   <style>
     :host {
       display: block;
     }
     .search-container {
       width: 100%;
-      @apply(--layout-horizontal);
+    @apply(--layout-horizontal);
     }
     .search-input {
       marign-left: 10px;
@@ -13,7 +13,7 @@
       --paper-input-container-color: var(--text-primary-color);
       --paper-input-container-focus-color: var(--text-primary-color);
       --paper-input-container-input-color: var(--text-primary-color);
-      @apply(--layout-flex);
+    @apply(--layout-flex);
     }
     .use-keywords {
       margin-top: 34px;
@@ -25,7 +25,7 @@
     .clear-search {
       margin-top: 25px;
     }
-    .style-overview {
+    .style-notes {
       height: 620px;
       margin: 10px;
       overflow: auto;
@@ -76,7 +76,7 @@
       text-decoration: underline;
     }
     @media all and (min-width: 0) and (max-width: 361px) and (orientation: portrait) {
-      .style-overview {
+      .style-notes {
         height: 470px;
       }
       .search-input {
@@ -102,7 +102,7 @@
       }
     }
     @media all and (min-width: 1601px) and (max-width: 1921px) {
-      .style-overview {
+      .style-notes {
         height: 725px;
         margin: 10px;
         overflow: auto;
@@ -113,23 +113,22 @@
     <paper-material elevation="3">
       <paper-toolbar>
         <div class="search-container">
-        <paper-input class="search-input" id="txtSearch" label="Search" type="text" value="{{searchStr}}"></paper-input>
-        <paper-checkbox class="use-keywords" id="chbKeywords"></paper-checkbox>
-        <paper-icon-button class="clear-search" icon="clear" on-click="_clearSearch"></paper-icon-button>
-      </div>
+          <paper-input class="search-input" id="txtSearch" label="Search" type="text" value="{{searchStr}}"></paper-input>
+          <paper-checkbox class="use-keywords" id="chbKeywords">Keywords</paper-checkbox>
+          <paper-icon-button class="clear-search" icon="clear" on-click="_clearSearch"></paper-icon-button>
+        </div>
       </paper-toolbar>
     </paper-material>
 
-    <div id="divOverview" class="style-overview">
-      <template id="templateOverview" is="dom-repeat" items="{{urlCollection}}" as="userObj">
+    <div id="divNotes" class="style-notes">
+      <template id="templateNotes" is="dom-repeat" items="{{noteCollection}}" as="userObj">
         <div id="collectionAllCard" class="style-all-cards">
           <template is="dom-repeat" items="{{userObj}}" as="item">
             <template is="dom-if" if="{{_hasItemId(item)}}">
               <template is="dom-if" if="{{_searchForItems(item, searchStr)}}">
                 <paper-material class="style-card" elevation="3">
                   <paper-toolbar>
-                    <h3>Date:&nbsp;</h3><h3><span>{{item.date}}</span></h3>
-                    <h3>,&nbsp;</h3><h3><span>{{item.time}}</span></h3>
+                    <h3><span>{{item.title}}</span></h3>
                   </paper-toolbar>
                   <paper-fab class="style-card-fab" mini icon="clear" on-click="remove"></paper-fab>
                   <p><a href="{{item.value}}" target="_blank">{{item.value}}</a></p>
@@ -147,12 +146,12 @@
 <script>
   (function() {
     Polymer({
-      is: 'my-overview',
+      is: 'my-notes',
 
       /**
        * Load Items from Firebase
        */
-      reloadOverview: function() {
+      reloadNotes: function() {
         if (Util.isUserLoginExpired(UserInfo.get(UserInfo.EXPIREDATE))) {
           this.fire('login-expired');
           return;
@@ -161,13 +160,13 @@
         var id = UserInfo.get(UserInfo.USERID);
         var that = this;
 
-        var rootRef = new Firebase('https://yeah-url-extension.firebaseio.com/' + id + '/urlcollector');
+        var rootRef = new Firebase('https://yeah-url-extension.firebaseio.com/' + id + '/notescollector');
         rootRef.on('value', function(snapshot) {
 
-          that.urlCollection = [];
+          that.noteCollection = [];
 
           snapshot.forEach(function(child) {
-            that.push('urlCollection', child.val());
+            that.push('noteCollection', child.val());
           });
         });
       },
@@ -209,7 +208,7 @@
       _removeFromFirebase: function(id, objId) {
         return new Promise(function(resolve, reject) {
           var userId = UserInfo.get(UserInfo.USERID);
-          var ref = new Firebase('https://yeah-url-extension.firebaseio.com/' + userId + '/urlcollector/' + objId + '/' + id);
+          var ref = new Firebase('https://yeah-url-extension.firebaseio.com/' + userId + '/notescollector/' + objId + '/' + id);
 
           var onComplete = function(error) {
             if (error) reject(error);
@@ -247,7 +246,7 @@
             else return item.value.toLowerCase().match(searchStr.toLowerCase());
           }
         } else {
-          return this.urlCollection;
+          return this.noteCollection;
         }
       },
 
@@ -261,18 +260,18 @@
       },
 
       /**
-       * Clear Url List
+       * Clear Note List
        */
       clearListview: function() {
-        var listView = document.querySelector('#divOverview');
+        var listView = document.querySelector('#divNotes');
         if (listView !== null) listView.innerHTML = '';
       },
 
       /**
-       * Init Url Collection
+       * Init Note Collection
        */
       ready: function() {
-        this.urlCollection = [];
+        this.noteCollection = [];
 
         var kwLabel = this.$.chbKeywords.querySelector('#checkboxLabel');
         if (window.matchMedia('(max-width: 361px)').matches) {

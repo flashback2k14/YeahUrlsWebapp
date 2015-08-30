@@ -3,25 +3,25 @@
     :host {
       display: block;
     }
-    .inputContainer {
+    .input-container {
       width: 100%;
       margin: 20px;
+    }
+    .inputs {
+      --paper-input-container-input-color: var(--dark-primary-color);
+    }
+    .btn-login {
+      margin-top: 15px;
+      margin-right: 0;
+      background: var(--default-primary-color);
+      color: var(--text-primary-color);
+      float: right;
     }
     paper-material {
       width: 340px;
     }
     paper-toolbar {
       width: 100%;
-    }
-    .inputs {
-      --paper-input-container-input-color: var(--dark-primary-color);
-    }
-    #btnLogin {
-      margin-top: 15px;
-      margin-right: 0;
-      background: var(--default-primary-color);
-      color: var(--text-primary-color);
-      float: right;
     }
   </style>
   <template>
@@ -30,7 +30,7 @@
         <h1 class="paper-font-display1"><span>Login</span></h1>
       </paper-toolbar>
     </paper-material>
-    <div class="inputContainer">
+    <div class="input-container">
       <paper-input
         class="inputs"
         id="txtEmailaddress"
@@ -46,7 +46,7 @@
         value="{{password::input}}">
       </paper-input>
       <paper-button
-        id="btnLogin"
+        class="btn-login"
         on-click="submitLogin">Login
       </paper-button>
     </div>

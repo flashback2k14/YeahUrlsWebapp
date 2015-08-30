@@ -67,7 +67,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           </a>
           <a data-route="overview" href="/overview">
             <iron-icon icon="list"></iron-icon>
-            <span>Overview</span>
+            <span>My URLs</span>
+          </a>
+          <a data-route="notes" href="/notes">
+            <iron-icon icon="note-add"></iron-icon>
+            <span>My Notes</span>
           </a>
         </paper-menu>
       </paper-header-panel>
@@ -103,6 +107,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                              on-remove-item-successful="handleRemoveItemSuccessful"
                              on-remove-item-failed="handleRemoveItemFailed">
                 </my-overview>
+              </paper-material>
+            </section>
+
+            <section data-route="notes">
+              <paper-material id="pmNotes" elevation="5">
+                <my-notes id="elNotes"
+                          on-login-expired="handleLoginExpired"
+                          on-remove-item-successful="handleRemoveItemSuccessful"
+                          on-remove-item-failed="handleRemoveItemFailed">
+                </my-notes>
               </paper-material>
             </section>
           </iron-pages>
