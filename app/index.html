@@ -112,7 +112,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             <section data-route="notes">
               <paper-material id="pmNotes" elevation="5">
-
+                <my-notes id="elNotes"
+                          on-login-expired="handleLoginExpired"
+                          on-remove-item-successful="handleRemoveItemSuccessful"
+                          on-remove-item-failed="handleRemoveItemFailed">
+                </my-notes>
               </paper-material>
             </section>
           </iron-pages>

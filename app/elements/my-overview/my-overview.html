@@ -3,31 +3,11 @@
     :host {
       display: block;
     }
-    @media all and (min-width: 0) and (max-width: 361px) and (orientation: portrait) {
-      #divOverview {
-        height: 530px;
-      }
-      #fabCard {
-        position: absolute !important;
-        top: 0;
-        right: 0;
-        z-index: 15;
-      }
-      paper-input {
-        width: 90%;
-      }
-    }
-    @media all and (min-width: 1601px) and (max-width: 1920px) {
-      #divOverview {
-        height: 710px;
-      }
-    }
-    .searchContainer {
+    .search-container {
       width: 100%;
       @apply(--layout-horizontal);
     }
-    .searchInput {
-      margin-top: 10px;
+    .search-input {
       marign-left: 10px;
       margin-right: 5px;
       --paper-input-container-color: var(--text-primary-color);
@@ -35,26 +15,40 @@
       --paper-input-container-input-color: var(--text-primary-color);
       @apply(--layout-flex);
     }
-    .useKeywords {
-      margin-top: 44px;
+    .use-keywords {
+      margin-top: 34px;
       margin-right: 5px;
       --paper-checkbox-unchecked-color: var(--text-primary-color);
       --paper-checkbox-checked-color: var(--accent-color);
       --paper-checkbox-label-color: var(--text-primary-color);
     }
-    .clearSearch {
-      margin-top: 35px;
+    .clear-search {
+      margin-top: 25px;
     }
-    #divOverview {
+    .style-overview {
       height: 620px;
       margin: 10px;
       overflow: auto;
     }
-    #fabCard {
+    .style-card-fab {
       position: absolute !important;
       top: 43px;
       right: 30px;
       z-index: 15;
+    }
+    .style-all-cards {
+      margin-left: 5px;
+      margin-top: 10px;
+      margin-bottom: 10px;
+      width: 98%;
+    }
+    .style-card {
+      margin-top: 10px;
+      border-radius: 4px;
+      background-color: var(--text-primary-color);
+    }
+    paper-toolbar {
+      word-wrap: break-word;
     }
     paper-input {
       margin-left: 15px;
@@ -64,20 +58,6 @@
     paper-checkbox{
       margin-left: 15px;
       margin-right: 40px;
-    }
-    #collectionAllCard {
-      margin-left: 5px;
-      margin-top: 10px;
-      margin-bottom: 10px;
-      width: 98%;
-    }
-    #collectionCard {
-      margin-top: 10px;
-      border-radius: 4px;
-      background-color: var(--text-primary-color);
-    }
-    paper-toolbar {
-      word-wrap: break-word;
     }
     p{
       padding-left: 10px;
@@ -95,50 +75,69 @@
     a:hover {
       text-decoration: underline;
     }
-    .with-tooltip {
-      display: inline-block;
-      margin-bottom: 20px;
-      overflow: hidden;
+    @media all and (min-width: 0) and (max-width: 361px) and (orientation: portrait) {
+      .style-overview {
+        height: 470px;
+      }
+      .search-input {
+        margin-top: -2px;
+      }
+      .use-keywords {
+        margin-top: 32px;
+      }
+      .clear-search {
+        margin-top: 23px;
+      }
+      .style-all-cards {
+        margin-top: 15px;
+      }
+      .style-card-fab {
+        position: absolute !important;
+        top: 35px;
+        right: 10px;
+        z-index: 15;
+      }
+      paper-input {
+        width: 90%;
+      }
     }
-    .tooltip {
-      --paper-tooltip-background: var(--accent-color);
+    @media all and (min-width: 1601px) and (max-width: 1921px) {
+      .style-overview {
+        height: 725px;
+        margin: 10px;
+        overflow: auto;
+      }
     }
   </style>
   <template>
     <paper-material elevation="3">
       <paper-toolbar>
-        <div class="searchContainer">
-        <paper-input class="searchInput" id="txtSearch" label="Search" type="text" value="{{searchStr}}"></paper-input>
-        <div class="with-tooltip">
-          <paper-checkbox class="useKeywords" id="chbKeywords">Keywords</paper-checkbox>
-          <paper-tooltip class="tooltip">Search inside the Keywords.</paper-tooltip>
-        </div>
-        <div class="with-tooltip">
-          <paper-icon-button class="clearSearch" icon="clear" on-click="clearSearch"></paper-icon-button>
-          <paper-tooltip class="tooltip">Clear Search Input.</paper-tooltip>
-        </div>
+        <div class="search-container">
+        <paper-input class="search-input" id="txtSearch" label="Search" type="text" value="{{searchStr}}"></paper-input>
+        <paper-checkbox class="use-keywords" id="chbKeywords"></paper-checkbox>
+        <paper-icon-button class="clear-search" icon="clear" on-click="_clearSearch"></paper-icon-button>
       </div>
       </paper-toolbar>
     </paper-material>
 
-    <div id="divOverview">
+    <div id="divOverview" class="style-overview">
       <template id="templateOverview" is="dom-repeat" items="{{urlCollection}}" as="userObj">
-        <div id="collectionAllCard">
-            <template is="dom-repeat" items="{{userObj}}" as="item">
-              <template is="dom-if" if="{{hasItemId(item)}}">
-                <template is="dom-if" if="{{searchForItems(item, searchStr)}}">
-                  <paper-material id="collectionCard" elevation="3">
-                    <paper-toolbar>
-                      <h3>Date:&nbsp;</h3><h3><span>{{item.date}}</span></h3>
-                      <h3>,&nbsp;</h3><h3><span>{{item.time}}</span></h3>
-                    </paper-toolbar>
-                    <paper-fab id="fabCard" mini icon="clear" on-click="remove"></paper-fab>
-                    <p><a href="{{item.value}}" target="_blank">{{item.value}}</a></p>
-                    <p><strong>{{item.keywords}}</strong></p>
-                  </paper-material>
-                </template>
+        <div id="collectionAllCard" class="style-all-cards">
+          <template is="dom-repeat" items="{{userObj}}" as="item">
+            <template is="dom-if" if="{{_hasItemId(item)}}">
+              <template is="dom-if" if="{{_searchForItems(item, searchStr)}}">
+                <paper-material class="style-card" elevation="3">
+                  <paper-toolbar>
+                    <h3>Date:&nbsp;</h3><h3><span>{{item.date}}</span></h3>
+                    <h3>,&nbsp;</h3><h3><span>{{item.time}}</span></h3>
+                  </paper-toolbar>
+                  <paper-fab class="style-card-fab" mini icon="clear" on-click="remove"></paper-fab>
+                  <p><a href="{{item.value}}" target="_blank">{{item.value}}</a></p>
+                  <p><strong>{{item.keywords}}</strong></p>
+                </paper-material>
               </template>
             </template>
+          </template>
         </div>
       </template>
     </div>
@@ -150,14 +149,17 @@
     Polymer({
       is: 'my-overview',
 
+      /**
+       * Load Items from Firebase
+       */
       reloadOverview: function() {
-        var id = UserInfo.get(UserInfo.USERID);
-        var that = this;
-
         if (Util.isUserLoginExpired(UserInfo.get(UserInfo.EXPIREDATE))) {
           this.fire('login-expired');
           return;
         }
+
+        var id = UserInfo.get(UserInfo.USERID);
+        var that = this;
 
         var rootRef = new Firebase('https://yeah-url-extension.firebaseio.com/' + id + '/urlcollector');
         rootRef.on('value', function(snapshot) {
@@ -165,41 +167,21 @@
           that.urlCollection = [];
 
           snapshot.forEach(function(child) {
-            var urlObjs = child.val();
-            var objId = child.key();
-
-            urlObjs = that._addObjIdToUrlCollection(urlObjs, objId);
-            that.push('urlCollection', urlObjs);
+            that.push('urlCollection', child.val());
           });
         });
       },
 
-      _addObjIdToUrlCollection: function(urlColl, objId) {
-        for (var i = 0; i < urlColl.length; i++) {
-          if (typeof urlColl[i] !== 'undefined') {
-            if (!urlColl[i].hasOwnProperty('objId')) {
-              urlColl[i].objId = objId;
-            }
-          }
-        }
-        return urlColl;
-      },
-
-      _removeFromFirebase: function(id, objId) {
-        return new Promise(function(resolve, reject) {
-          var userId = UserInfo.get(UserInfo.USERID);
-          var ref = new Firebase('https://yeah-url-extension.firebaseio.com/' + userId + '/urlcollector/' + objId + '/' + id);
-
-          var onComplete = function(error) {
-            if (error) reject(error);
-            else resolve({'value':'remove successful'});
-          };
-
-          ref.remove(onComplete);
-        });
-      },
-
+      /**
+       * Remove selected Item from Firebase
+       * @param e
+       */
       remove: function(e) {
+        if (Util.isUserLoginExpired(UserInfo.get(UserInfo.EXPIREDATE))) {
+          this.fire('login-expired');
+          return;
+        }
+
         var model = e.model;
         var urlObj = model.item;
 
@@ -217,11 +199,45 @@
           });
       },
 
-      hasItemId: function(item) {
+      /**
+       * Remove it!
+       * @param id
+       * @param objId
+       * @return {Promise}
+       * @private
+       */
+      _removeFromFirebase: function(id, objId) {
+        return new Promise(function(resolve, reject) {
+          var userId = UserInfo.get(UserInfo.USERID);
+          var ref = new Firebase('https://yeah-url-extension.firebaseio.com/' + userId + '/urlcollector/' + objId + '/' + id);
+
+          var onComplete = function(error) {
+            if (error) reject(error);
+            else resolve({'value':'remove successful'});
+          };
+
+          ref.remove(onComplete);
+        });
+      },
+
+      /**
+       * Check if Item as an Id
+       * @param item
+       * @return {boolean}
+       * @private
+       */
+      _hasItemId: function(item) {
         return item.hasOwnProperty('id');
       },
 
-      searchForItems: function(item, searchStr) {
+      /**
+       * Search for matching Items
+       * @param item
+       * @param searchStr
+       * @return {Object, Array}
+       * @private
+       */
+      _searchForItems: function(item, searchStr) {
         var useKeywords = this.$.chbKeywords.checked;
 
         if (searchStr !== undefined) {
@@ -235,21 +251,34 @@
         }
       },
 
-      clearSearch: function() {
+      /**
+       * Clear Search Input
+       * @private
+       */
+      _clearSearch: function() {
         this.$.txtSearch.value = '';
         this.$.chbKeywords.checked = false;
       },
 
+      /**
+       * Clear Url List
+       */
       clearListview: function() {
-        var listView = document.querySelector('#collectionAllCard');
-        listView.innerHTML = '';
+        var listView = document.querySelector('#divOverview');
+        if (listView !== null) listView.innerHTML = '';
       },
 
+      /**
+       * Init Url Collection
+       */
       ready: function() {
         this.urlCollection = [];
-        var app = document.querySelector('#app');
-        if (app.docReady) {
-          this.reloadOverview();
+
+        var kwLabel = this.$.chbKeywords.querySelector('#checkboxLabel');
+        if (window.matchMedia('(max-width: 361px)').matches) {
+          kwLabel.innerText = 'KW';
+        } else {
+          kwLabel.innerText = 'Keywords';
         }
       }
     });

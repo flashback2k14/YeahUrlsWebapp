@@ -17,6 +17,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   var imgUserProfilePicture = null;
   var infoToast = null;
   var elOverview = null;
+  var elNotes = null;
 
   app.addEventListener('dom-change', function() {
     console.log('Yeah! URLs Webapp is ready to perform awesome stuff!');
@@ -30,6 +31,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     imgUserProfilePicture = document.querySelector('#imgUserProfilePicture');
     infoToast = document.querySelector('#info-toast');
     elOverview = document.querySelector('#elOverview');
+    elNotes = document.querySelector('#elNotes');
     //
     if (Util.isUserLoginExpired(UserInfo.get(UserInfo.EXPIREDATE))) {
       app.route = 'login';
@@ -41,6 +43,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       app.route = 'overview';
       //
       elOverview.reloadOverview();
+      elNotes.reloadNotes();
     }
   });
 
@@ -72,8 +75,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     imgUserProfilePicture.src = userProfilePicture;
     // go to the home element
     app.route = 'overview';
-    //
+    // Load Url and Note Collection
     elOverview.reloadOverview();
+    elNotes.reloadNotes();
     // show toast to inform the user
     infoToast.text = 'User ' + userEmailAddress + ' is logged in!';
     infoToast.style.background = '#2EB82E';
@@ -128,12 +132,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     //
     UserInfo.deleteAll();
     elOverview.clearListview();
+    elNotes.clearListview();
     //
     app.route = 'login';
   };
 
   app.onMenuSelect = function() {
     var drawerPanel = document.querySelector('#paperDrawerPanel');
+
     if (docReady) {
       if (drawerPanel.narrow) {
         drawerPanel.closeDrawer();

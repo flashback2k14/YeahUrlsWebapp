@@ -28,12 +28,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     /* Components */
     /* paper-drawer-panel */
-    --drawer-menu-color:           var(--background-color);
-    --drawer-border-color:         1px solid var(--dark-primary-color);
-    --drawer-toolbar-border-color: 1px solid var(--dark-background-color);
+    --drawer-menu-color:            var(--background-color);
+    --drawer-border-color:          1px solid var(--dark-primary-color);
+    --drawer-toolbar-border-color:  1px solid var(--dark-background-color);
     /* paper-menu */
-    --paper-menu-background-color: var(--background-color);
-    --menu-link-color: var(--light-primary-color);
+    --paper-menu-background-color:  var(--background-color);
+    --menu-link-color:              var(--light-primary-color);
   }
 
   /* General styles */
@@ -113,6 +113,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     max-height: 85%;
   }
 
+  #pmNotes {
+    height: 80%;
+    max-height: 85%;
+  }
+
   /*Custom Toolbar Menu*/
   .user-info-container {
     margin: 45px 10px 10px 0;
@@ -152,16 +157,17 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   }
 
   /* Breakpoints */
+  /* Material Design Adaptive Breakpoints */
   /* Small */
   @media (max-width: 600px) {
-    paper-material {
-      width: calc(97.33% - 32px);
-    }
     .paper-font-display1 {
       font-size: 18px;
     }
     .app-name {
       font-size: 26px;
+    }
+    .bg {
+      background: white;
     }
     #drawer .paper-toolbar {
       margin-left: 16px;
@@ -169,11 +175,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     #overlay {
       min-width: 360px;
     }
-    .bg {
-      background: white;
+    paper-material {
+      width: calc(97.33% - 32px);
     }
   }
-
   /* Tablet+ */
   @media (min-width: 601px) {
     paper-material {
@@ -186,15 +191,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       padding: 48px 62px;
     }
   }
-
-  /* Material Design Adaptive Breakpoints */
   /* mobile-small */
   @media all and (min-width: 0) and (max-width: 360px) and (orientation: portrait) {
+    .paper-font-display1 {
+      font-size: 18px;
+    }
+    .user-info-container {
+      margin: 25px 10px 10px 0;
+    }
+    .content {
+      height: 580px;
+    }
     #pmOverview {
       height: 550px;
     }
-    .content {
-      height: 530px;
+    #pmNotes {
+      height: 550px;
     }
   }
   /* mobile-large */
@@ -228,10 +240,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   /* desktop-xlarge */
   @media all and (min-width: 1601px) and (max-width: 1920px) {
     #pmOverview {
-      height: 800px;
+      height: 820px;
+    }
+    #pmNotes {
+      height: 820px;
     }
     .content {
-      height: 600px;
+      height: 900px;
     }
   }
 </style>
