@@ -152,12 +152,12 @@
        * Load Items from Firebase
        */
       reloadNotes: function() {
-        if (Util.isUserLoginExpired(UserInfo.get(UserInfo.EXPIREDATE))) {
+        if (this.userInfo.isLoginExpired(this.userInfo.get(this.userInfo.EXPIREDATE))) {
           this.fire('login-expired');
           return;
         }
 
-        var id = UserInfo.get(UserInfo.USERID);
+        var id = this.userInfo.get(this.userInfo.USERID);
         var that = this;
 
         var rootRef = new Firebase('https://yeah-url-extension.firebaseio.com/' + id + '/notescollector');
@@ -176,7 +176,7 @@
        * @param e
        */
       remove: function(e) {
-        if (Util.isUserLoginExpired(UserInfo.get(UserInfo.EXPIREDATE))) {
+        if (this.userInfo.isLoginExpired(this.userInfo.get(this.userInfo.EXPIREDATE))) {
           this.fire('login-expired');
           return;
         }
@@ -207,7 +207,7 @@
        */
       _removeFromFirebase: function(id, objId) {
         return new Promise(function(resolve, reject) {
-          var userId = UserInfo.get(UserInfo.USERID);
+          var userId = this.userInfo.get(this.userInfo.USERID);
           var ref = new Firebase('https://yeah-url-extension.firebaseio.com/' + userId + '/notescollector/' + objId + '/' + id);
 
           var onComplete = function(error) {
@@ -237,16 +237,10 @@
        * @private
        */
       _searchForItems: function(item, searchStr) {
-        var useKeywords = this.$.chbKeywords.checked;
-
-        if (searchStr !== undefined) {
-          if (searchStr.length === 0) return item;
-          else {
-            if (useKeywords) return item.keywords.toLowerCase().match(searchStr.toLowerCase());
-            else return item.value.toLowerCase().match(searchStr.toLowerCase());
-          }
+        if (searchStr === null ||typeof searchStr === 'undefined') {
+          return item;
         } else {
-          return this.noteCollection;
+          return item.value.toLowerCase().match(searchStr.toLowerCase()) || item.keywords.toUpperCase().match(searchStr.toUpperCase());
         }
       },
 
@@ -271,6 +265,7 @@
        * Init Note Collection
        */
       ready: function() {
+        this.userInfo = new UserInfo();
         this.noteCollection = [];
 
         var kwLabel = this.$.chbKeywords.querySelector('#checkboxLabel');

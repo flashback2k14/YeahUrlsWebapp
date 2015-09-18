@@ -12,6 +12,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   var app = document.querySelector('#app');
 
   var docReady = false;
+  var userInfo = null;
   var tbUsername = null;
   var tbUserEmailAddress = null;
   var imgUserProfilePicture = null;
@@ -26,6 +27,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   window.addEventListener('WebComponentsReady', function() {
     docReady = true;
     //
+    userInfo = new UserInfo();
     tbUsername = document.querySelector('#tbUserName');
     tbUserEmailAddress = document.querySelector('#tbUserEmailAddress');
     imgUserProfilePicture = document.querySelector('#imgUserProfilePicture');
@@ -33,12 +35,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     elOverview = document.querySelector('#elOverview');
     elNotes = document.querySelector('#elNotes');
     //
-    if (Util.isUserLoginExpired(UserInfo.get(UserInfo.EXPIREDATE))) {
+    if (userInfo.isLoginExpired(userInfo.get(userInfo.EXPIREDATE))) {
       app.route = 'login';
     } else {
-      tbUsername.innerHTML = UserInfo.get(UserInfo.USERNAME);
-      tbUserEmailAddress.innerHTML = UserInfo.get(UserInfo.EMAILADDRESS);
-      imgUserProfilePicture.src = UserInfo.get(UserInfo.PROFILEIMAGE);
+      tbUsername.innerHTML = userInfo.get(userInfo.USERNAME);
+      tbUserEmailAddress.innerHTML = userInfo.get(userInfo.EMAILADDRESS);
+      imgUserProfilePicture.src = userInfo.get(userInfo.PROFILEIMAGE);
       //
       app.route = 'overview';
       //
@@ -59,16 +61,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     switch(userObj.provider) {
       case 'password':
         userEmailAddress = userObj.password.email;
-        userName = Util.getUsernameFromMailAddress(userEmailAddress);
+        userName = userInfo.getUsernameFromMailAddress(userEmailAddress);
         userProfilePicture = userObj.password.profileImageURL;
         break;
     }
     // set user info to local storage
-    UserInfo.set(UserInfo.USERID, userObj.uid);
-    UserInfo.set(UserInfo.EXPIREDATE, userObj.expires);
-    UserInfo.set(UserInfo.USERNAME, userName);
-    UserInfo.set(UserInfo.EMAILADDRESS, userEmailAddress);
-    UserInfo.set(UserInfo.PROFILEIMAGE, userProfilePicture);
+    userInfo.set(userInfo.USERID, userObj.uid);
+    userInfo.set(userInfo.EXPIREDATE, userObj.expires);
+    userInfo.set(userInfo.USERNAME, userName);
+    userInfo.set(userInfo.EMAILADDRESS, userEmailAddress);
+    userInfo.set(userInfo.PROFILEIMAGE, userProfilePicture);
     // set user info to toolbar menu
     tbUsername.innerHTML = userName;
     tbUserEmailAddress.innerHTML = userEmailAddress;
@@ -130,7 +132,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     tbUserEmailAddress.innerHTML = 'Your Emailaddress...';
     imgUserProfilePicture.src = '../images/touch/icon-128x128.png';
     //
-    UserInfo.deleteAll();
+    userInfo.deleteAll();
     elOverview.clearListview();
     elNotes.clearListview();
     //

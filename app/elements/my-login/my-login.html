@@ -36,17 +36,18 @@
         id="txtEmailaddress"
         label="Emailaddress"
         type="text"
-        value="{{emailAddress::input}}">
+        value="{{emailAddress}}">
       </paper-input>
       <paper-input
         class="inputs"
         id="txtPassword"
         label="Password"
         type="password"
-        value="{{password::input}}">
+        value="{{password}}">
       </paper-input>
       <paper-button
         class="btn-login"
+        raised
         on-click="submitLogin">Login
       </paper-button>
     </div>
@@ -58,7 +59,7 @@
     Polymer({
       is: 'my-login',
 
-      properties: {
+      /*properties: {
         emailAddress: {
           type: String,
           value: '',
@@ -69,7 +70,7 @@
           value: '',
           notify: true
         }
-      },
+      },*/
 
       _clearInputs: function(clearBoth) {
         if (clearBoth) {
