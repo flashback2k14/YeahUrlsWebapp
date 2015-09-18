@@ -1,4 +1,4 @@
-<dom-module id="my-login">
+<dom-module id="yeah-login">
   <style>
     :host {
       display: block;
@@ -48,7 +48,7 @@
       <paper-button
         class="btn-login"
         raised
-        on-click="submitLogin">Login
+        on-tap="submitLogin">Login
       </paper-button>
     </div>
   </template>
@@ -57,57 +57,34 @@
 <script>
   (function() {
     Polymer({
-      is: 'my-login',
-
-      /*properties: {
-        emailAddress: {
-          type: String,
-          value: '',
-          notify: true
-        },
-        password: {
-          type: String,
-          value: '',
-          notify: true
-        }
-      },*/
-
+      is: 'yeah-login',
+      /**
+       * Clear input fields
+       * @param clearBoth
+       * @private
+       */
       _clearInputs: function(clearBoth) {
-        if (clearBoth) {
-          this.$.txtEmailaddress.value = '';
-        }
-        this.$.txtPassword.value = '';
+        if (clearBoth) this.$.txtEmailaddress.value = '';
+        else this.$.txtPassword.value = '';
       },
-
-      _authWithPassword: function(userObj) {
-        return new Promise(function(resolve, reject) {
-          var rootRef = new Firebase('https://yeah-url-extension.firebaseio.com/');
-          rootRef.authWithPassword(userObj, function onAuth(err, user) {
-            if (err) reject(err);
-            if (user) resolve(user);
-          });
-        });
-      },
-
+      /**
+       * Login to firebase db
+       */
       submitLogin: function() {
-        var emailAddress = this.$.txtEmailaddress.value;
-        var password = this.$.txtPassword.value;
-        var that = this;
-
         var user = {
-          'email': emailAddress,
-          'password': password
+          'email': this.$.txtEmailaddress.value,
+          'password': this.$.txtPassword.value
         };
 
-        this._authWithPassword(user)
-          .then(function(user) {
-            that._clearInputs(true);
-            that.fire('login-successful', user);
-          })
-          .catch(function(err) {
-            that._clearInputs(false);
-            that.fire('login-failed', err);
-          });
+        Auth.getInstance().authWithPassword(user)
+          .then(function(user){
+            this._clearInputs(true);
+            this.fire('login-successful', user);
+          }.bind(this))
+          .catch(function(err){
+            this._clearInputs(false);
+            this.fire('login-failed', err);
+          }.bind(this));
       }
     });
   })();

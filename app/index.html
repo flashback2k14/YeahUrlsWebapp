@@ -61,15 +61,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </paper-toolbar>
         <!-- Drawer Content -->
         <paper-menu class="list" attr-for-selected="data-route" selected="{{route}}" on-iron-select="onMenuSelect">
-          <a data-route="login" href="/">
+          <a data-route="login" id="menuItemLogin" class="show-menu-item" href="/">
             <iron-icon icon="social:person-outline"></iron-icon>
             <span>Login</span>
           </a>
-          <a data-route="overview" href="/overview">
+          <a data-route="overview" id="menuItemUrls" class="hide-menu-item" href="/overview">
             <iron-icon icon="list"></iron-icon>
             <span>My URLs</span>
           </a>
-          <a data-route="notes" href="/notes">
+          <a data-route="notes" id="menuItemNotes" class="hide-menu-item" href="/notes">
             <iron-icon icon="note-add"></iron-icon>
             <span>My Notes</span>
           </a>
@@ -93,30 +93,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <iron-pages attr-for-selected="data-route" selected="{{route}}">
             <section data-route="login">
               <paper-material id="pmLogin" elevation="5">
-                <my-login id="elLogin"
+                <yeah-login id="elLogin"
                           on-login-successful="handleLoginSuccessful"
                           on-login-failed="handleLoginFailed">
-                </my-login>
+                </yeah-login>
               </paper-material>
             </section>
 
-            <section data-route="overview">
-              <paper-material id="pmOverview" elevation="5">
-                <my-overview id="elOverview"
+            <section data-route="urls">
+              <paper-material id="pmUrls" elevation="5">
+                <yeah-urls id="elUrls"
                              on-login-expired="handleLoginExpired"
                              on-remove-item-successful="handleRemoveItemSuccessful"
                              on-remove-item-failed="handleRemoveItemFailed">
-                </my-overview>
+                </yeah-urls>
               </paper-material>
             </section>
 
             <section data-route="notes">
               <paper-material id="pmNotes" elevation="5">
-                <my-notes id="elNotes"
+                <yeah-notes id="elNotes"
                           on-login-expired="handleLoginExpired"
                           on-remove-item-successful="handleRemoveItemSuccessful"
                           on-remove-item-failed="handleRemoveItemFailed">
-                </my-notes>
+                </yeah-notes>
               </paper-material>
             </section>
           </iron-pages>
@@ -131,7 +131,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </template>
   <!-- build:js scripts/app.js -->
   <script src="scripts/app.js"></script>
-  <script src="scripts/userinfo.js"></script>
+  <script src="scripts/auth.js"></script>
+  <script src="scripts/util.js"></script>
+  <script src="scripts/user-info.js"></script>
   <!-- endbuild-->
   <!--firebase-->
   <script src='https://cdn.firebase.com/js/client/2.2.9/firebase.js'></script>

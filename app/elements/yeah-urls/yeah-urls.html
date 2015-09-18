@@ -1,4 +1,4 @@
-<dom-module id="my-overview">
+<dom-module id="yeah-urls">
   <style>
     :host {
       display: block;
@@ -164,18 +164,18 @@
 <script>
   (function() {
     Polymer({
-      is: 'my-overview',
+      is: 'yeah-urls',
 
       /**
        * Load Items from Firebase
        */
       reloadOverview: function() {
-        if (this.userInfo.isLoginExpired(this.userInfo.get(this.userInfo.EXPIREDATE))) {
+        if (UserInfo.isLoginExpired(UserInfo.get(UserInfo.EXPIREDATE))) {
           this.fire('login-expired');
           return;
         }
 
-        var id = this.userInfo.get(this.userInfo.USERID);
+        var id = UserInfo.get(UserInfo.USERID);
         var that = this;
 
         var rootRef = new Firebase('https://yeah-url-extension.firebaseio.com/' + id + '/urlcollector');
@@ -210,7 +210,7 @@
        * @param e
        */
       remove: function(e) {
-        if (this.userInfo.isLoginExpired(this.userInfo.get(this.userInfo.EXPIREDATE))) {
+        if (UserInfo.isLoginExpired(UserInfo.get(UserInfo.EXPIREDATE))) {
           this.fire('login-expired');
           return;
         }
@@ -243,7 +243,7 @@
        */
       _removeFromFirebase: function(id, objId) {
         return new Promise(function(resolve, reject) {
-          var userId = this.userInfo.get(this.userInfo.USERID);
+          var userId = UserInfo.get(UserInfo.USERID);
           var ref = new Firebase('https://yeah-url-extension.firebaseio.com/' + userId + '/urlcollector/' + objId + '/' + id);
 
           var onComplete = function(error) {
@@ -324,7 +324,6 @@
        * Init Url Collection
        */
       ready: function() {
-        this.userInfo = new UserInfo();
         this.urlCollection = [];
         this.keywords = [];
       }
