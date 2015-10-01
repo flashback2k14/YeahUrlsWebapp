@@ -52,12 +52,11 @@ var FirebaseDAO = (function() {
       return items;
     }
     /**
-     * remove it from Collection
+     * remove item from Collection
      * @param route
      * @param id
      * @param objId
      * @return {Promise}
-     * @private
      */
     function removeItemFromCollection(route, id, objId) {
       return new Promise(function(resolve, reject) {
@@ -66,10 +65,30 @@ var FirebaseDAO = (function() {
           if (error) {
             reject(error);
           } else {
-            resolve({'value':'remove successful'});
+            resolve({'value':'remove was successful'});
           }
         };
         ref.remove(onComplete);
+      });
+    }
+    /**
+     * edit item in Collection
+     * @param route
+     * @param id
+     * @param objId
+     * @param item
+     */
+    function editItemFromCollection(route, id, objId, item) {
+      return new Promise(function(resolve, reject) {
+        var ref = new Firebase(firebaseBaseUrl + uId + route + '/' + objId + '/' + id);
+        var onComplete = function(error) {
+          if (error) {
+            reject(error);
+          } else {
+            resolve({'value':'edit was successful'});
+          }
+        };
+        ref.update(item, onComplete);
       });
     }
     /**
@@ -77,7 +96,8 @@ var FirebaseDAO = (function() {
      */
     return {
       loadCollections           : loadCollections,
-      removeItemFromCollection  : removeItemFromCollection
+      removeItemFromCollection  : removeItemFromCollection,
+      editItemFromCollection    : editItemFromCollection
     };
   }
 

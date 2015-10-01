@@ -103,9 +103,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <section data-route="urls">
               <paper-material id="pmUrls" elevation="5">
                 <yeah-urls id="elUrls"
-                             on-login-expired="handleLoginExpired"
-                             on-remove-item-successful="handleRemoveItemSuccessful"
-                             on-remove-item-failed="handleRemoveItemFailed">
+                           on-login-expired="handleLoginExpired"
+                           on-edit-item-successful="handleEditItemSuccessful"
+                           on-edit-item-failed="handleEditItemFailed"
+                           on-remove-item-successful="handleRemoveItemSuccessful"
+                           on-remove-item-failed="handleRemoveItemFailed">
                 </yeah-urls>
               </paper-material>
             </section>

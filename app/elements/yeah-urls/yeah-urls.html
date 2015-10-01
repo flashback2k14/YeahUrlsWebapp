@@ -1,41 +1,14 @@
-<dom-module id="yeah-urls">
+<dom-module id='yeah-urls'>
   <template>
     <!-- Element Styling -->
     <style>
       :host {
         display: block;
       }
-      /*.search-container {
-        width: 100%;
-        @apply(--layout-horizontal);
-      }
-      .search-input {
-        marign-left: 10px;
-        margin-right: 5px;
-        --paper-input-container-color: var(--text-primary-color);
-        --paper-input-container-focus-color: var(--text-primary-color);
-        --paper-input-container-input-color: var(--text-primary-color);
-        @apply(--layout-flex);
-      }
-      .style-dropdown {
-        margin-top: -8px;
-        --paper-input-container-color: var(--text-primary-color);
-        --paper-input-container-focus-color: var(--text-primary-color);
-        --paper-input-container-input-color: var(--text-primary-color);
-      }
-      .clear-search {
-        margin-top: 25px;
-      }*/
       .style-overview {
         height: 620px;
         margin: 10px;
         overflow: auto;
-      }
-      .style-card-fab {
-        position: absolute !important;
-        top: 43px;
-        right: 30px;
-        z-index: 1;
       }
       .style-all-cards {
         margin-left: 5px;
@@ -43,56 +16,17 @@
         margin-bottom: 10px;
         width: 98%;
       }
-      .style-card {
-        margin-top: 10px;
-        border-radius: 4px;
-        background-color: var(--text-primary-color);
-      }
-      paper-toolbar {
-        word-wrap: break-word;
-      }
       paper-input {
         margin-left: 15px;
         margin-right: 40px;
         width: 50%;
       }
-      p{
-        padding-left: 10px;
-        padding-bottom: 5px;
-        margin-top: 20px;
-        margin-bottom: 5px;
-        width: 90%;
-      }
-      a {
-        word-wrap: break-word;
-        margin: 10px 10px 0 0;
-        padding: 10px 10px 0 0;
-        text-decoration: none;
-      }
-      a:hover {
-        text-decoration: underline;
-      }
       @media all and (min-width: 0) and (max-width: 361px) and (orientation: portrait) {
         .style-overview {
           height: 470px;
         }
-        .search-input {
-          margin-top: -2px;
-        }
-        .use-keywords {
-          margin-top: 32px;
-        }
-        .clear-search {
-          margin-top: 23px;
-        }
         .style-all-cards {
           margin-top: 15px;
-        }
-        .style-card-fab {
-          position: absolute !important;
-          top: 35px;
-          right: 10px;
-          z-index: 1;
         }
         paper-input {
           width: 90%;
@@ -107,43 +41,51 @@
       }
     </style>
     <!-- Element Markup -->
+    <!-- Edit Dialog -->
+    <yeah-dialog-edit
+      id="elEditDialog"
+      collection='urlCollection'
+      kwCollection='keywordCollection'
+      route='/urlcollector'
+      on-login-expired='_handleLoginExpired'
+      on-edit-item-successful='_handleEditItemSuccessful'
+      on-edit-item-failed='_handleEditItemFailed'>
+    </yeah-dialog-edit>
+
     <!-- Delete Confirm Dialog -->
     <yeah-dialog-delete
-      id="elDeleteDialog"
-      collection="urlCollection"
-      kwCollection="keywordCollection"
-      route="/urlcollector"
-      on-login-expired="_handleLoginExpired"
-      on-delete-item-successful="_handleDeleteItemSuccessful"
-      on-delete-item-failed="_handleDeleteItemFailed">
+      id='elDeleteDialog'
+      collection='urlCollection'
+      kwCollection='keywordCollection'
+      route='/urlcollector'
+      on-login-expired='_handleLoginExpired'
+      on-delete-item-successful='_handleDeleteItemSuccessful'
+      on-delete-item-failed='_handleDeleteItemFailed'>
     </yeah-dialog-delete>
 
     <!-- Searchview -->
     <yeah-search
-      id="elSearch"
-      searchStr="{{searchString}}"
-      keywords="{{keywordCollection}}"
-      on-search-input-changed="_handleSearchInputChanged"
-      on-drop-down-selected-item="_handleDropDownSelectedItem"
-      on-clear-search-input-fields="_handleClearSearchInputFields">
+      id='elSearch'
+      searchStr='{{searchString}}'
+      keywords='{{keywordCollection}}'
+      on-search-input-changed='_handleSearchInputChanged'
+      on-drop-down-selected-item='_handleDropDownSelectedItem'
+      on-clear-search-input-fields='_handleClearSearchInputFields'>
     </yeah-search>
 
     <!-- Listview -->
-    <div id="divOverview" class="style-overview">
-      <template id="templateOverview" is="dom-repeat" items="{{urlCollection}}" as="userObj">
-        <div id="collectionAllCard" class="style-all-cards">
-          <template is="dom-repeat" items="{{userObj}}" as="item">
-            <template is="dom-if" if="{{_hasItemId(item)}}">
-              <template is="dom-if" if="{{_searchForItems(item, searchString)}}">
-                <paper-material class="style-card" elevation="3">
-                  <paper-toolbar>
-                    <h3>Date:&nbsp;</h3><h3><span>{{item.date}}</span></h3>
-                    <h3>,&nbsp;</h3><h3><span>{{item.time}}</span></h3>
-                  </paper-toolbar>
-                  <paper-fab class="style-card-fab" mini icon="clear" on-tap="_openDeleteDialog"></paper-fab>
-                  <p><a href="{{item.value}}" target="_blank">{{item.value}}</a></p>
-                  <p><strong>{{item.keywords}}</strong></p>
-                </paper-material>
+    <div id='divOverview' class='style-overview'>
+      <template id='templateOverview' is='dom-repeat' items='{{urlCollection}}' as='userObj'>
+        <div id='collectionAllCard' class='style-all-cards'>
+          <template is='dom-repeat' items='{{userObj}}' as='item'>
+            <template is='dom-if' if='{{_hasItemId(item)}}'>
+              <template is='dom-if' if='{{_searchForItems(item, searchString)}}'>
+                <!-- Listview Item -->
+                <yeah-listitem-url
+                  item='[[item]]'
+                  on-open-edit-dialog='_handleOpenEditDialog'
+                  on-open-delete-dialog='_handleOpenDeleteDialog'>
+                </yeah-listitem-url>
               </template>
             </template>
           </template>
@@ -162,34 +104,6 @@
        * PRIVATE FUNCTIONS
        */
       /**
-       * DELETE DIALOG
-       */
-      /**
-       * Open Delete Dialog
-       * @param e selected item
-       * @private
-       */
-      _openDeleteDialog: function(e) {
-        var itemPosInColl = this._getPositionInCollection(e.model.item);
-        this.$.elDeleteDialog.toggleDialog(this, e.model.item, itemPosInColl);
-      },
-      /**
-       * Get Array Position from removed Item
-       * @param obj
-       * @private
-       */
-      _getPositionInCollection: function(obj) {
-        for (var i = 0; i < this.urlCollection.length; i++) {
-          for (var j = 0; j < this.urlCollection[i].length; j++) {
-            if (obj === this.urlCollection[i][j]) {
-              return i;
-            }
-          }
-        }
-        return -1;
-      },
-
-      /**
        * handle expired Login
        * @private
        */
@@ -197,6 +111,32 @@
         this.$.elDeleteDialog.toggleDialog();
         this.fire('login-expired');
       },
+
+      /**
+       * EDIT DIALOG
+       */
+      /**
+       * handle edit item successful
+       * @param e
+       * @private
+       */
+      _handleEditItemSuccessful: function(e) {
+        this.$.elEditDialog.toggleDialog();
+        this.fire('edit-item-successful', e);
+      },
+      /**
+       * handle edit item failed
+       * @param e
+       * @private
+       */
+      _handleEditItemFailed: function(e) {
+        this.$.elEditDialog.toggleDialog();
+        this.fire('edit-item-failed', e);
+      },
+
+      /**
+       * DELETE DIALOG
+       */
       /**
        * handle delete item successful
        * @param e
@@ -267,6 +207,42 @@
         } else {
           return item.value.toLowerCase().match(searchStr.toLowerCase()) || item.keywords.toUpperCase().match(searchStr.toUpperCase());
         }
+      },
+
+      /**
+       * LIST VIEW ITEM
+       */
+      /**
+       * Open Edit Dialog
+       * @param e selected item
+       * @private
+       */
+      _handleOpenEditDialog: function(e) {
+        this.$.elEditDialog.toggleDialog(this, e.model.item);
+      },
+      /**
+       * Open Delete Dialog
+       * @param e selected item
+       * @private
+       */
+      _handleOpenDeleteDialog: function(e) {
+        var itemPosInColl = this._getPositionInCollection(e.model.item);
+        this.$.elDeleteDialog.toggleDialog(this, e.model.item, itemPosInColl);
+      },
+      /**
+       * Get Array Position from removed Item
+       * @param obj
+       * @private
+       */
+      _getPositionInCollection: function(obj) {
+        for (var i = 0; i < this.urlCollection.length; i++) {
+          for (var j = 0; j < this.urlCollection[i].length; j++) {
+            if (obj === this.urlCollection[i][j]) {
+              return i;
+            }
+          }
+        }
+        return -1;
       },
 
       /**

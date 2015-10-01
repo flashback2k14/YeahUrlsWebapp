@@ -1,19 +1,108 @@
 <dom-module id="yeah-listitem-url">
-  <style>
-    :host {
-      display: block;
-    }
-  </style>
   <template>
-
+    <!-- Element Styling -->
+    <style>
+      :host {
+        display: block;
+      }
+      .style-card {
+        margin-top: 10px;
+        border-radius: 4px;
+        background-color: var(--text-primary-color);
+      }
+      .style-card-fab-edit {
+        position: absolute !important;
+        top: 43px;
+        right: 80px;
+        z-index: 1;
+      }
+      .style-card-fab-delete {
+        position: absolute !important;
+        top: 43px;
+        right: 30px;
+        z-index: 1;
+      }
+      paper-toolbar {
+        word-wrap: break-word;
+      }
+      p {
+        padding-left: 10px;
+        padding-bottom: 5px;
+        margin-top: 20px;
+        margin-bottom: 5px;
+        width: 90%;
+      }
+      a {
+        word-wrap: break-word;
+        margin: 10px 10px 0 0;
+        padding: 10px 10px 0 0;
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      @media all and (min-width: 0) and (max-width: 361px) and (orientation: portrait) {
+        .style-card-fab-edit {
+          position: absolute !important;
+          top: 35px;
+          right: 50px;
+          z-index: 1;
+        }
+        .style-card-fab-delete {
+          position: absolute !important;
+          top: 35px;
+          right: 10px;
+          z-index: 1;
+        }
+      }
+    </style>
+    <!-- Element Markup -->
+    <paper-material class="style-card" elevation="3">
+      <paper-toolbar>
+        <h3>Date:&nbsp;</h3><h3><span>[[item.date]]</span></h3>
+        <h3>,&nbsp;</h3><h3><span>[[item.time]]</span></h3>
+      </paper-toolbar>
+      <paper-fab class="style-card-fab-edit" mini icon="create" on-tap="_openEditDialog"></paper-fab>
+      <paper-fab class="style-card-fab-delete" mini icon="clear" on-tap="_openDeleteDialog"></paper-fab>
+      <p><a href="[[item.value]]" target="_blank">[[item.value]]</a></p>
+      <p><strong>[[item.keywords]]</strong></p>
+    </paper-material>
   </template>
 </dom-module>
-
+<!-- Element Logic -->
 <script>
   (function() {
     Polymer({
-      is: 'yeah-listitem-url'
-
+      is: 'yeah-listitem-url',
+      /**
+       * PROPERTIES
+       */
+      properties: {
+        item: {
+          type: Object,
+          value: {},
+          notify: true
+        }
+      },
+      /**
+       * PRIVATE FUNCTIONS
+       */
+      /**
+       * Open Edit Dialog
+       * @param e
+       * @private
+       */
+      _openEditDialog: function(e) {
+        this.fire('open-edit-dialog', e);
+      },
+      /**
+       * Open Delete Dialog
+       * @param e
+       * @private
+       */
+      _openDeleteDialog: function(e) {
+        this.fire('open-delete-dialog', e);
+      }
     });
   })();
 </script>

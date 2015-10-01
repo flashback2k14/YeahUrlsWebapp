@@ -28,30 +28,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   window.addEventListener('WebComponentsReady', function() {
     docReady = true;
-    //
+    // get elements from dom
     tbUsername = document.querySelector('#tbUserName');
     tbUserEmailAddress = document.querySelector('#tbUserEmailAddress');
     imgUserProfilePicture = document.querySelector('#imgUserProfilePicture');
     menuItemLogin = document.querySelector('#menuItemLogin');
     menuItemUrls = document.querySelector('#menuItemUrls');
     menuItemNotes = document.querySelector('#menuItemNotes');
-    //
     infoToast = document.querySelector('#info-toast');
-    //
     elUrls = document.querySelector('#elUrls');
     elNotes = document.querySelector('#elNotes');
-    //
+    // check if user login is expired
     if (UserInfo.isLoginExpired(UserInfo.get(UserInfo.EXPIREDATE))) {
       app.route = 'login';
     } else {
       tbUsername.innerHTML = UserInfo.get(UserInfo.USERNAME);
       tbUserEmailAddress.innerHTML = UserInfo.get(UserInfo.EMAILADDRESS);
       imgUserProfilePicture.src = UserInfo.get(UserInfo.PROFILEIMAGE);
-      //
+      // toggle menu drawer items
       Util.getInstance().toggleMenuItems(menuItemLogin, menuItemUrls, menuItemNotes);
-      //
+      // go to urls page
       app.route = 'urls';
-      //
+      // load data from firebase
       elUrls.loadUrlCollection();
       elNotes.reloadNotes();
     }
@@ -105,26 +103,38 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   app.handleLoginExpired = function() {
     Util.getInstance()
       .showToast(infoToast, 'Login is expired! Please log in!', '#FF3333', '#EEEEEE');
-    //
+    // go to login page
     app.route = 'login';
   };
 
+  app.handleEditItemSuccessful = function(e) {
+    var successObj = e.detail.detail;
+    if (successObj)
+      Util.getInstance().showToast(infoToast, 'URL Item ' + successObj.value + '.', '#2EB82E', '#EEEEEE');
+  };
+
+  app.handleEditItemFailed = function(e) {
+    var errorObj = e.detail.detail;
+    if (errorObj)
+      Util.getInstance().showToast(infoToast, 'Edit URL Item is failed! Error: ' + errorObj.value, '#FF3333', '#EEEEEE');
+  };
+
   app.handleRemoveItemSuccessful = function(e) {
-    var successObj = e.detail;
-    Util.getInstance()
-      .showToast(infoToast, 'URL Item ' + successObj.value + ' was successful', '#2EB82E', '#EEEEEE');
+    var successObj = e.detail.detail;
+    if (successObj)
+      Util.getInstance().showToast(infoToast, 'URL Item ' + successObj.value + '.', '#2EB82E', '#EEEEEE');
   };
 
   app.handleRemoveItemFailed = function(e) {
-    var errorObj = e.detail;
-    Util.getInstance()
-      .showToast(infoToast, 'Remove URL Item is failed! Error: ' + errorObj.value, '#FF3333', '#EEEEEE');
+    var errorObj = e.detail.detail;
+    if (errorObj)
+      Util.getInstance().showToast(infoToast, 'Remove URL Item is failed! Error: ' + errorObj.value, '#FF3333', '#EEEEEE');
   };
 
   app.logoutUser = function() {
     Util.getInstance()
       .showToast(infoToast, 'Logging out...', '#333333', '#EEEEEE');
-    //
+    // log user out
     Auth.getInstance().logout();
     // set Placedolder to toolbar menu
     tbUsername.innerHTML = 'Your Username...';
@@ -132,11 +142,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     imgUserProfilePicture.src = '../images/touch/icon-128x128.png';
     // toggle Menu Items
     Util.getInstance().toggleMenuItems(menuItemLogin, menuItemUrls, menuItemNotes);
-    //
+    // delete localStorage and clear listviews
     UserInfo.deleteAllItems();
     elUrls.clearListview();
     elNotes.clearListview();
-    //
+    // go to login page
     app.route = 'login';
   };
 
