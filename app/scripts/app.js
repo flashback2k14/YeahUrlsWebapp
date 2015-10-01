@@ -50,9 +50,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       //
       Util.getInstance().toggleMenuItems(menuItemLogin, menuItemUrls, menuItemNotes);
       //
-      app.route = 'overview';
+      app.route = 'urls';
       //
-      elUrls.reloadOverview();
+      elUrls.loadUrlCollection();
       elNotes.reloadNotes();
     }
   });
@@ -68,8 +68,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     // get emailaddress, username, profileUrl
     switch(userObj.provider) {
       case 'password':
-        userName = UserInfo.getUsernameFromMailAddress(userEmailAddress);
         userEmailAddress = userObj.password.email;
+        userName = UserInfo.getUsernameFromMailAddress(userEmailAddress);
         userProfilePicture = userObj.password.profileImageURL;
         break;
     }
@@ -86,9 +86,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     // toggle Menu Items
     Util.getInstance().toggleMenuItems(menuItemLogin, menuItemUrls, menuItemNotes);
     // go to the home element
-    app.route = 'overview';
+    app.route = 'urls';
     // Load Url and Note Collection
-    elUrls.reloadOverview();
+    elUrls.loadUrlCollection();
     elNotes.reloadNotes();
     // show toast to inform the user
     Util.getInstance()

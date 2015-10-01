@@ -1,30 +1,32 @@
 <dom-module id="yeah-login">
-  <style>
-    :host {
-      display: block;
-    }
-    .input-container {
-      width: 100%;
-      margin: 20px;
-    }
-    .inputs {
-      --paper-input-container-input-color: var(--dark-primary-color);
-    }
-    .btn-login {
-      margin-top: 15px;
-      margin-right: 0;
-      background: var(--default-primary-color);
-      color: var(--text-primary-color);
-      float: right;
-    }
-    paper-material {
-      width: 340px;
-    }
-    paper-toolbar {
-      width: 100%;
-    }
-  </style>
   <template>
+    <!-- Element Styling -->
+    <style>
+      :host {
+        display: block;
+      }
+      .input-container {
+        width: 100%;
+        margin: 20px;
+      }
+      .inputs {
+        --paper-input-container-input-color: var(--dark-primary-color);
+      }
+      .btn-login {
+        margin-top: 15px;
+        margin-right: 0;
+        background: var(--default-primary-color);
+        color: var(--text-primary-color);
+        float: right;
+      }
+      paper-material {
+        width: 340px;
+      }
+      paper-toolbar {
+        width: 100%;
+      }
+    </style>
+    <!-- Element Markup -->
     <paper-material elevation="3">
       <paper-toolbar>
         <h1 class="paper-font-display1"><span>Login</span></h1>
@@ -53,7 +55,7 @@
     </div>
   </template>
 </dom-module>
-
+<!-- Element Logic -->
 <script>
   (function() {
     Polymer({

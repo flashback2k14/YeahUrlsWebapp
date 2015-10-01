@@ -17,11 +17,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <title>Yeah! URLs Webapp</title>
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
   <!-- Chrome for Android theme color -->
-  <meta name="theme-color" content="#009688">
+  <meta name="theme-color" content="#083D56">
   <!-- Web Application Manifest -->
   <link rel="manifest" href="manifest.json">
   <!-- Tile color for Win8 -->
-  <meta name="msapplication-TileColor" content="#009688">
+  <meta name="msapplication-TileColor" content="#083D56">
   <!-- Add to homescreen for Chrome on Android -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="application-name" content="Yeah! URLs Webapp">
@@ -65,7 +65,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <iron-icon icon="social:person-outline"></iron-icon>
             <span>Login</span>
           </a>
-          <a data-route="overview" id="menuItemUrls" class="hide-menu-item" href="/overview">
+          <a data-route="urls" id="menuItemUrls" class="hide-menu-item" href="/urls">
             <iron-icon icon="list"></iron-icon>
             <span>My URLs</span>
           </a>
@@ -132,10 +132,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <!-- build:js scripts/app.js -->
   <script src="scripts/app.js"></script>
   <script src="scripts/auth.js"></script>
+  <script src="scripts/firebase-dao.js"></script>
   <script src="scripts/util.js"></script>
   <script src="scripts/user-info.js"></script>
   <!-- endbuild-->
   <!--firebase-->
-  <script src='https://cdn.firebase.com/js/client/2.2.9/firebase.js'></script>
+  <script src='https://cdn.firebase.com/js/client/2.3.0/firebase.js'></script>
 </body>
 </html>
