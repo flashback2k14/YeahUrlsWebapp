@@ -5,45 +5,11 @@
       :host {
         display: block;
       }
-      .style-overview {
-        height: 620px;
-        margin: 10px;
-        overflow: auto;
-      }
-      .style-all-cards {
-        margin-left: 5px;
-        margin-top: 10px;
-        margin-bottom: 10px;
-        width: 98%;
-      }
-      paper-input {
-        margin-left: 15px;
-        margin-right: 40px;
-        width: 50%;
-      }
-      @media all and (min-width: 0) and (max-width: 361px) and (orientation: portrait) {
-        .style-overview {
-          height: 470px;
-        }
-        .style-all-cards {
-          margin-top: 15px;
-        }
-        paper-input {
-          width: 90%;
-        }
-      }
-      @media all and (min-width: 1601px) and (max-width: 1921px) {
-        .style-overview {
-          height: 725px;
-          margin: 10px;
-          overflow: auto;
-        }
-      }
     </style>
     <!-- Element Markup -->
     <!-- Edit Dialog -->
     <yeah-dialog-edit
-      id="elEditDialog"
+      id='elEditDialog'
       collection='urlCollection'
       kwCollection='keywordCollection'
       route='/urlcollector'
@@ -51,7 +17,6 @@
       on-edit-item-successful='_handleEditItemSuccessful'
       on-edit-item-failed='_handleEditItemFailed'>
     </yeah-dialog-edit>
-
     <!-- Delete Confirm Dialog -->
     <yeah-dialog-delete
       id='elDeleteDialog'
@@ -62,7 +27,6 @@
       on-delete-item-successful='_handleDeleteItemSuccessful'
       on-delete-item-failed='_handleDeleteItemFailed'>
     </yeah-dialog-delete>
-
     <!-- Searchview -->
     <yeah-search
       id='elSearch'
@@ -72,26 +36,16 @@
       on-drop-down-selected-item='_handleDropDownSelectedItem'
       on-clear-search-input-fields='_handleClearSearchInputFields'>
     </yeah-search>
-
     <!-- Listview -->
-    <div id='divOverview' class='style-overview'>
-      <template id='templateOverview' is='dom-repeat' items='{{urlCollection}}' as='userObj'>
-        <div id='collectionAllCard' class='style-all-cards'>
-          <template is='dom-repeat' items='{{userObj}}' as='item'>
-            <template is='dom-if' if='{{_hasItemId(item)}}'>
-              <template is='dom-if' if='{{_searchForItems(item, searchString)}}'>
-                <!-- Listview Item -->
-                <yeah-listitem-url
-                  item='[[item]]'
-                  on-open-edit-dialog='_handleOpenEditDialog'
-                  on-open-delete-dialog='_handleOpenDeleteDialog'>
-                </yeah-listitem-url>
-              </template>
-            </template>
-          </template>
-        </div>
-      </template>
-    </div>
+    <yeah-listview
+      id='elUrlListView'
+      collection='{{urlCollection}}'
+      keyword-collection='{{keywordCollection}}'
+      search-string='{{searchString}}'
+      is-url-list-view='true'
+      on-toggle-edit-dialog='_handleToggleEditDialog'
+      on-toggle-delete-dialog='_handleToggleDeleteDialog'>
+    </yeah-listview>
   </template>
 </dom-module>
 <!-- Element logic -->
@@ -186,63 +140,20 @@
        * LIST VIEW
        */
       /**
-       * Check if Item as an Id
-       * @param item
-       * @return {boolean}
-       * @private
-       */
-      _hasItemId: function(item) {
-        return item.hasOwnProperty('id');
-      },
-      /**
-       * Search for matching Items
-       * @param item
-       * @param searchStr
-       * @return {Object, Array}
-       * @private
-       */
-      _searchForItems: function(item, searchStr) {
-        if (searchStr === null ||typeof searchStr === 'undefined') {
-          return item;
-        } else {
-          return item.value.toLowerCase().match(searchStr.toLowerCase()) || item.keywords.toUpperCase().match(searchStr.toUpperCase());
-        }
-      },
-
-      /**
-       * LIST VIEW ITEM
-       */
-      /**
        * Open Edit Dialog
        * @param e selected item
        * @private
        */
-      _handleOpenEditDialog: function(e) {
-        this.$.elEditDialog.toggleDialog(this, e.model.item);
+      _handleToggleEditDialog: function(e) {
+        this.$.elEditDialog.toggleDialog(this, e.detail);
       },
       /**
        * Open Delete Dialog
        * @param e selected item
        * @private
        */
-      _handleOpenDeleteDialog: function(e) {
-        var itemPosInColl = this._getPositionInCollection(e.model.item);
-        this.$.elDeleteDialog.toggleDialog(this, e.model.item, itemPosInColl);
-      },
-      /**
-       * Get Array Position from removed Item
-       * @param obj
-       * @private
-       */
-      _getPositionInCollection: function(obj) {
-        for (var i = 0; i < this.urlCollection.length; i++) {
-          for (var j = 0; j < this.urlCollection[i].length; j++) {
-            if (obj === this.urlCollection[i][j]) {
-              return i;
-            }
-          }
-        }
-        return -1;
+      _handleToggleDeleteDialog: function(e) {
+        this.$.elDeleteDialog.toggleDialog(this, e.detail.value, e.detail.posInColl);
       },
 
       /**
@@ -263,16 +174,7 @@
        * clear URL listview
        */
       clearListview: function() {
-        var listView = document.querySelector('#divOverview');
-        if (listView !== null) listView.innerHTML = '';
-      },
-      /**
-       * init global element variables
-       */
-      ready: function() {
-        this.searchString = null;
-        this.urlCollection = [];
-        this.keywordCollection = [];
+        this.$.elUrlListView.clearListview();
       }
     });
   })();

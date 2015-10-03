@@ -28,11 +28,12 @@ var FirebaseDAO = (function() {
      */
     function loadCollections(route, pathToItems, pathToKeywords) {
       var dataRef = new Firebase(firebaseBaseUrl + uId + route);
-      dataRef.on("value", function(snapshot) {
+      dataRef.on('value', function(snapshot) {
         context.set(pathToItems, []);
         snapshot.forEach(function (child) {
           context.push(pathToItems, _extractKeywords(child.val(), pathToKeywords));
         });
+        //_sortKeywords(pathToKeywords);
       });
     }
     /**
@@ -44,13 +45,25 @@ var FirebaseDAO = (function() {
     function _extractKeywords(items, pathToKeywords) {
       var kw = items[0].keywords;
       if (context.get(pathToKeywords).length === 0) {
-        context.push(pathToKeywords, "");
+        context.push(pathToKeywords, '');
       }
       if (context.get(pathToKeywords).indexOf(kw) === -1) {
         context.push(pathToKeywords, kw);
       }
       return items;
     }
+
+    /**
+     * Sort Keyword Collection -> but not sorting :-/
+     * @param pathToKeywords
+     * @private
+     */
+    function _sortKeywords(pathToKeywords) {
+      var arr = context.get(pathToKeywords);
+      context.set(pathToKeywords, []);
+      context.push(pathToKeywords, arr.sort());
+    }
+
     /**
      * remove item from Collection
      * @param route

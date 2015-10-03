@@ -1,4 +1,4 @@
-<dom-module id="yeah-dialog-delete">
+<dom-module id='yeah-dialog-delete'>
   <template>
     <!-- Element Styling -->
     <style>
@@ -8,14 +8,14 @@
     </style>
     <!-- Element Markup -->
     <paper-dialog
-      id="confirmDeleteDialog"
-      entry-animation="scale-up-animation"
-      exit-animation="fade-out-animation"
+      id='confirmDeleteDialog'
+      entry-animation='scale-up-animation'
+      exit-animation='fade-out-animation'
       modal>
       <h2>Are you sure to delete Item: <span>[[item.id]]</span> from <span>[[item.keywords]]</span>?</h2>
-      <div class="buttons">
+      <div class='buttons'>
         <paper-button dialog-dismiss autofocus>Cancel</paper-button>
-        <paper-button on-tap="_remove">OK</paper-button>
+        <paper-button on-tap='_remove'>OK</paper-button>
       </div>
     </paper-dialog>
   </template>

@@ -1,4 +1,4 @@
-<dom-module id="yeah-search">
+<dom-module id='yeah-search'>
   <style>
     :host {
       display: block;
@@ -26,37 +26,37 @@
     }
   </style>
   <template>
-    <paper-material elevation="3">
+    <paper-material elevation='3'>
       <paper-toolbar>
-        <div class="search-container">
+        <div class='search-container'>
           <paper-input
-            id="txtSearch"
-            class="search-input"
-            label="Search"
-            type="text"
-            value="{{searchStr}}"
-            on-change="_searchInputChanged">
+            id='txtSearch'
+            class='search-input'
+            label='Search'
+            type='text'
+            value='{{searchStr}}'
+            on-change='_searchInputChanged'>
           </paper-input>
           <paper-dropdown-menu
-            id="keywordsDropdown"
-            class="style-dropdown"
-            label="Keywords"
-            on-paper-dropdown-close="_dropDownClosed">
+            id='keywordsDropdown'
+            class='style-dropdown'
+            label='Keywords'
+            on-paper-dropdown-close='_dropDownClosed'>
             <paper-menu
-              class="dropdown-content"
-              selected="0">
+              class='dropdown-content'
+              selected='0'>
               <template
-                is="dom-repeat"
-                items="{{keywords}}"
-                as="keyword">
+                is='dom-repeat'
+                items='{{keywords}}'
+                as='keyword'>
                 <paper-item>[[keyword]]</paper-item>
               </template>
             </paper-menu>
           </paper-dropdown-menu>
           <paper-icon-button
-            class="clear-search"
-            icon="clear"
-            on-tap="_clearSearch">
+            class='clear-search'
+            icon='clear'
+            on-tap='_clearSearch'>
           </paper-icon-button>
         </div>
       </paper-toolbar>

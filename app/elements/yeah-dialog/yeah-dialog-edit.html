@@ -1,4 +1,4 @@
-<dom-module id="yeah-dialog-edit">
+<dom-module id='yeah-dialog-edit'>
   <template>
     <!-- Element Styling -->
     <style>
@@ -14,20 +14,20 @@
     </style>
     <!-- Element Markup -->
     <paper-dialog
-      id="editDialog"
-      entry-animation="scale-up-animation"
-      exit-animation="fade-out-animation"
+      id='editDialog'
+      entry-animation='scale-up-animation'
+      exit-animation='fade-out-animation'
       modal>
       <h2>Edit Item: <span>[[item.id]]</span></h2>
       <paper-dialog-scrollable>
-        <div class="style-edit-container">
-          <paper-textarea id="txtValue" label="Url" value="[[item.value]]" rows="1" max-rows="3"></paper-textarea >
-          <paper-input id="txtKeywords" label="Keywords" value="[[item.keywords]]"></paper-input>
+        <div class='style-edit-container'>
+          <paper-textarea id='txtValue' label='Url' value='[[item.value]]' rows='1' max-rows='3'></paper-textarea >
+          <paper-input id='txtKeywords' label='Keywords' value='[[item.keywords]]'></paper-input>
         </div>
       </paper-dialog-scrollable>
-      <div class="buttons">
+      <div class='buttons'>
         <paper-button dialog-dismiss autofocus>Cancel</paper-button>
-        <paper-button on-tap="_edit">Edit</paper-button>
+        <paper-button on-tap='_edit'>Edit</paper-button>
       </div>
     </paper-dialog>
   </template>
