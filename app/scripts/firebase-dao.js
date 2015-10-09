@@ -3,6 +3,7 @@ var FirebaseDAO = (function() {
    * Instance stores a reference to the Singleton
    */
   var instance;
+
   /**
    * public Util functions
    * @return {*}

@@ -51,7 +51,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       app.route = 'urls';
       // load data from firebase
       elUrls.loadUrlCollection();
-      elNotes.reloadNotes();
+      elNotes.loadNotesCollection();
     }
   });
 
@@ -87,7 +87,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     app.route = 'urls';
     // Load Url and Note Collection
     elUrls.loadUrlCollection();
-    elNotes.reloadNotes();
+    elNotes.loadNotesCollection();
     // show toast to inform the user
     Util.getInstance()
       .showToast(infoToast, 'User ' + userEmailAddress + ' is logged in!', '#2EB82E', '#EEEEEE');

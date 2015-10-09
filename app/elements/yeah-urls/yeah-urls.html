@@ -42,7 +42,6 @@
       collection='{{urlCollection}}'
       keyword-collection='{{keywordCollection}}'
       search-string='{{searchString}}'
-      is-url-list-view='true'
       on-toggle-edit-dialog='_handleToggleEditDialog'
       on-toggle-delete-dialog='_handleToggleDeleteDialog'>
     </yeah-listview>
@@ -168,7 +167,8 @@
           return;
         }
         var id = UserInfo.get(UserInfo.USERID);
-        FirebaseDAO.getInstance(this, id).loadCollections('/urlcollector', 'urlCollection', 'keywordCollection');
+        var fbdaoUrls = new FirebaseDAO(this, id);
+        fbdaoUrls.loadCollections('/urlcollector', 'urlCollection', 'keywordCollection');
       },
       /**
        * clear URL listview

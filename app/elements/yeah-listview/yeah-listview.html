@@ -10,7 +10,7 @@
         margin: 10px;
         overflow: auto;
       }
-      .urls-loading {
+      .collection-loading {
         margin-top: 50px;
         font-size: 30px;
         text-align: center;
@@ -44,31 +44,19 @@
     <!-- Element Markup -->
     <div id='divOverview' class='style-overview'>
       <template is='dom-if' if='{{!collection.length}}'>
-        <p class='urls-loading'>URL Collection is loading...</p>
+        <p class='collection-loading'>Collection is loading...</p>
       </template>
       <template id='templateOverview' is='dom-repeat' items='{{collection}}' as='userObj'>
         <div id='collectionAllCard' class='style-all-cards'>
           <template is='dom-repeat' items='{{userObj}}' as='item'>
             <template is='dom-if' if='{{_hasItemId(item)}}'>
               <template is='dom-if' if='{{_searchForItems(item, searchString)}}'>
-                <!-- Listview Item -->
-
-                <template is='dom-if' if='{{isUrlListView}}'>
-                  <yeah-listitem-url
-                    item='[[item]]'
-                    on-open-edit-dialog='_handleOpenEditDialog'
-                    on-open-delete-dialog='_handleOpenDeleteDialog'>
-                  </yeah-listitem-url>
-                </template>
-
-                <template is='dom-if' if='{{!isUrlListView}}'>
-                  <yeah-listitem-note>
-                    <!--item='[[item]]'
-                    on-open-edit-dialog='_handleOpenEditDialog'
-                    on-open-delete-dialog='_handleOpenDeleteDialog'-->
-                  </yeah-listitem-note>
-                </template>
-
+                <!-- List Item -->
+                <yeah-listitem
+                  item='{{item}}'
+                  on-open-edit-dialog='_handleOpenEditDialog'
+                  on-open-delete-dialog='_handleOpenDeleteDialog'>
+                </yeah-listitem>
               </template>
             </template>
           </template>
@@ -97,11 +85,6 @@
         searchString: {
           type: String,
           value: '',
-          notify: true
-        },
-        isUrlListView: {
-          type: Boolean,
-          value: true,
           notify: true
         }
       },

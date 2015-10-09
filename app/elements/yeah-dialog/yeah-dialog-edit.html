@@ -88,7 +88,7 @@
           'value': this.$.txtValue.value
         };
 
-        FirebaseDAO.getInstance(this.context, userId).editItemFromCollection(this.route, id, objId, editItem)
+        new FirebaseDAO(this.context, userId).editItemFromCollection(this.route, id, objId, editItem)
           .then(function(obj) {
             this.fire('edit-item-successful', obj);
           }.bind(this))

@@ -69,7 +69,7 @@
         var objId = this.item.objId;
         var posInColl = this.positionInCollection;
 
-        FirebaseDAO.getInstance(this.context, userId).removeItemFromCollection(this.route, id, objId)
+        new FirebaseDAO(this.context, userId).removeItemFromCollection(this.route, id, objId)
           .then(function(obj) {
             if (posInColl === -1) {
               this.context.arrayDelete(this.kwCollection, this.item.keywords);

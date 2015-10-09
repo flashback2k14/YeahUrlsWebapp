@@ -1,4 +1,4 @@
-<dom-module id='yeah-listitem-url'>
+<dom-module id='yeah-listitem'>
   <template>
     <!-- Element Styling -->
     <style>
@@ -57,23 +57,22 @@
       }
     </style>
     <!-- Element Markup -->
-    <paper-material class='style-card' elevation='3'>
+    <paper-material class="style-card" elevation="3">
       <paper-toolbar>
-        <h3>Date:&nbsp;</h3><h3><span>[[item.date]]</span></h3>
-        <h3>,&nbsp;</h3><h3><span>[[item.time]]</span></h3>
+        <h3><span>{{itemTitle}}</span></h3>
       </paper-toolbar>
       <paper-fab class='style-card-fab-edit' mini icon='create' on-tap='_openEditDialog'></paper-fab>
-      <paper-fab class='style-card-fab-delete' mini icon='clear' on-tap='_openDeleteDialog'></paper-fab>
-      <p><a href='[[item.value]]' target='_blank'>[[item.value]]</a></p>
-      <p><strong>[[item.keywords]]</strong></p>
+      <paper-fab class="style-card-fab-delete" mini icon="clear" on-click="remove"></paper-fab>
+      <p><a href="{{item.value}}" target="_blank">{{item.value}}</a></p>
+      <p><strong>{{item.keywords}}</strong></p>
     </paper-material>
   </template>
 </dom-module>
-<!-- Element Logic -->
+
 <script>
   (function() {
     Polymer({
-      is: 'yeah-listitem-url',
+      is: 'yeah-listitem',
       /**
        * PROPERTIES
        */
@@ -87,6 +86,20 @@
       /**
        * PRIVATE FUNCTIONS
        */
+      /**
+       * Compute Toolbar Title Text
+       * @param date
+       * @param time
+       * @param title
+       * @private
+       */
+      _computeTitle: function(date, time, title) {
+        if (typeof date === 'undefined' && typeof time === 'undefined') {
+          this.itemTitle = title;
+        } else {
+          this.itemTitle = "Date: " + date + ", " + time;
+        }
+      },
       /**
        * Open Edit Dialog
        * @param e
@@ -102,6 +115,14 @@
        */
       _openDeleteDialog: function(e) {
         this.fire('open-delete-dialog', e);
+      },
+
+      /**
+       * PUBLIC FUNCTIONS
+       * Set Title
+       */
+      ready: function() {
+        this._computeTitle(this.item.date, this.item.time, this.item.title);
       }
     });
   })();
