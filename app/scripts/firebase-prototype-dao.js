@@ -24,12 +24,12 @@ FirebaseDAO.prototype.loadCollections = function(route, pathToItems, pathToKeywo
     snapshot.forEach(function (child) {
       this.context.push(pathToItems, this._extractKeywords(child.val(), pathToKeywords));
     }.bind(this));
-    //this._sortKeywords(pathToKeywords);
+    this._sortKeywords(pathToKeywords);
   }.bind(this));
 };
 
 /**
- * extract keywords from urlcollections
+ * extract keywords from collections
  * @param items
  * @param pathToKeywords
  * @private
@@ -46,15 +46,13 @@ FirebaseDAO.prototype._extractKeywords = function(items, pathToKeywords) {
 };
 
 /**
- * extract keywords from urlcollections
- * @param items
+ * sort keywords from collections
  * @param pathToKeywords
  * @private
  */
 FirebaseDAO.prototype._sortKeywords = function(pathToKeywords) {
   var arr = this.context.get(pathToKeywords);
-  this.context.set(pathToKeywords, []);
-  this.context.push(pathToKeywords, arr.sort());
+  this.context.set(pathToKeywords, arr.sort());
 };
 
 /**
