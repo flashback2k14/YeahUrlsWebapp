@@ -1,0 +1,150 @@
+<dom-module id='yeah-listview'>
+  <template>
+    <!-- Element Styling -->
+    <style>
+      :host {
+        display: block;
+      }
+      .style-overview {
+        height: 620px;
+        margin: 10px;
+        overflow: auto;
+      }
+      .collection-loading {
+        margin-top: 50px;
+        font-size: 30px;
+        text-align: center;
+        font-family: sans-serif;
+        font-weight: 100;
+        color: var(--default-primary-color);
+        line-height: 20px;
+      }
+      .style-all-cards {
+        margin-left: 5px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        width: 98%;
+      }
+      @media all and (min-width: 0) and (max-width: 361px) and (orientation: portrait) {
+        .style-overview {
+          height: 470px;
+        }
+        .style-all-cards {
+          margin-top: 15px;
+        }
+      }
+      @media all and (min-width: 1601px) and (max-width: 1921px) {
+        .style-overview {
+          height: 725px;
+          margin: 10px;
+          overflow: auto;
+        }
+      }
+    </style>
+    <!-- Element Markup -->
+    <div id='divOverview' class='style-overview'>
+      <template is='dom-if' if='{{!collection.length}}'>
+        <p class='collection-loading'>Collection is loading...</p>
+      </template>
+      <template id='templateOverview' is='dom-repeat' items='{{collection}}' as='userObj'>
+        <div id='collectionAllCard' class='style-all-cards'>
+          <template is='dom-repeat' items='{{userObj}}' as='item'>
+            <template is='dom-if' if='{{_hasItemId(item)}}'>
+              <template is='dom-if' if='{{_searchForItems(item, searchString)}}'>
+                <!-- List Item -->
+                <yeah-listitem
+                  item='{{item}}'
+                  on-open-edit-dialog='_handleOpenEditDialog'
+                  on-open-delete-dialog='_handleOpenDeleteDialog'>
+                </yeah-listitem>
+              </template>
+            </template>
+          </template>
+        </div>
+      </template>
+    </div>
+  </template>
+</dom-module>
+<!-- Element Logic -->
+<script>
+  (function() {
+    Polymer({
+      is: 'yeah-listview',
+
+      properties: {
+        collection: {
+          type: Array,
+          value: [],
+          notify: true
+        },
+        keywordCollection: {
+          type: Array,
+          value: [],
+          notify: true
+        },
+        searchString: {
+          type: String,
+          value: '',
+          notify: true
+        }
+      },
+
+      /**
+       * Check if Item as an Id
+       * @param item
+       * @return {boolean}
+       * @private
+       */
+      _hasItemId: function(item) {
+        return item.hasOwnProperty('id');
+      },
+      /**
+       * Search for matching Items
+       * @param item
+       * @param searchStr
+       * @return {Object, Array}
+       * @private
+       */
+      _searchForItems: function(item, searchStr) {
+        if (searchStr === null ||typeof searchStr === 'undefined') {
+          return item;
+        } else {
+          return item.value.toLowerCase().match(searchStr.toLowerCase()) || item.keywords.toUpperCase().match(searchStr.toUpperCase());
+        }
+      },
+
+      _handleOpenEditDialog: function(e) {
+        this.fire('toggle-edit-dialog', e.model.item);
+      },
+
+      _handleOpenDeleteDialog: function(e) {
+        var item = {
+          'value': e.model.item,
+          'posInColl': this._getPositionInCollection(e.model.item)
+        };
+        this.fire('toggle-delete-dialog', item);
+      },
+
+      /**
+       * Get Array Position from removed Item
+       * @param obj
+       * @private
+       */
+      _getPositionInCollection: function(obj) {
+        for (var i = 0; i < this.collection.length; i++) {
+          for (var j = 0; j < this.collection[i].length; j++) {
+            if (obj === this.collection[i][j]) {
+              return i;
+            }
+          }
+        }
+        return -1;
+      },
+
+      clearListview: function() {
+        var listView = document.querySelector('#divOverview');
+        if (listView !== null) listView.innerHTML = '';
+      }
+    });
+  })();
+</script>

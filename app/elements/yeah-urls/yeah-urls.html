@@ -1,0 +1,181 @@
+<dom-module id='yeah-urls'>
+  <template>
+    <!-- Element Styling -->
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <!-- Element Markup -->
+    <!-- Edit Dialog -->
+    <yeah-dialog-edit
+      id='elEditDialog'
+      collection='urlCollection'
+      kwCollection='keywordCollection'
+      route='/urlcollector'
+      on-login-expired='_handleLoginExpired'
+      on-edit-item-successful='_handleEditItemSuccessful'
+      on-edit-item-failed='_handleEditItemFailed'>
+    </yeah-dialog-edit>
+    <!-- Delete Confirm Dialog -->
+    <yeah-dialog-delete
+      id='elDeleteDialog'
+      collection='urlCollection'
+      kwCollection='keywordCollection'
+      route='/urlcollector'
+      on-login-expired='_handleLoginExpired'
+      on-delete-item-successful='_handleDeleteItemSuccessful'
+      on-delete-item-failed='_handleDeleteItemFailed'>
+    </yeah-dialog-delete>
+    <!-- Searchview -->
+    <yeah-search
+      id='elSearch'
+      searchStr='{{searchString}}'
+      keywords='{{keywordCollection}}'
+      on-search-input-changed='_handleSearchInputChanged'
+      on-drop-down-selected-item='_handleDropDownSelectedItem'
+      on-clear-search-input-fields='_handleClearSearchInputFields'>
+    </yeah-search>
+    <!-- Listview -->
+    <yeah-listview
+      id='elUrlListView'
+      collection='{{urlCollection}}'
+      keyword-collection='{{keywordCollection}}'
+      search-string='{{searchString}}'
+      on-toggle-edit-dialog='_handleToggleEditDialog'
+      on-toggle-delete-dialog='_handleToggleDeleteDialog'>
+    </yeah-listview>
+  </template>
+</dom-module>
+<!-- Element logic -->
+<script>
+  (function() {
+    Polymer({
+      is: 'yeah-urls',
+
+      /**
+       * PRIVATE FUNCTIONS
+       */
+      /**
+       * handle expired Login
+       * @private
+       */
+      _handleLoginExpired: function() {
+        this.$.elDeleteDialog.toggleDialog();
+        this.fire('login-expired');
+      },
+
+      /**
+       * EDIT DIALOG
+       */
+      /**
+       * handle edit item successful
+       * @param e
+       * @private
+       */
+      _handleEditItemSuccessful: function(e) {
+        this.$.elEditDialog.toggleDialog();
+        this.fire('edit-item-successful', e);
+      },
+      /**
+       * handle edit item failed
+       * @param e
+       * @private
+       */
+      _handleEditItemFailed: function(e) {
+        this.$.elEditDialog.toggleDialog();
+        this.fire('edit-item-failed', e);
+      },
+
+      /**
+       * DELETE DIALOG
+       */
+      /**
+       * handle delete item successful
+       * @param e
+       * @private
+       */
+      _handleDeleteItemSuccessful: function(e) {
+        this.$.elDeleteDialog.toggleDialog();
+        this.fire('remove-item-successful', e);
+      },
+      /**
+       * handle delete item failed
+       * @param e
+       * @private
+       */
+      _handleDeleteItemFailed: function(e) {
+        this.$.elDeleteDialog.toggleDialog();
+        this.fire('remove-item-failed', e);
+      },
+
+      /**
+       * SEARCH VIEW
+       */
+      /**
+       * Handle Search Input Value from Yeah-Search
+       * @param e
+       * @private
+       */
+      _handleSearchInputChanged: function(e) {
+        this.searchString = e.detail.value;
+      },
+      /**
+       * get selected drop down item
+       * @param e {Object}
+       * @private
+       */
+      _handleDropDownSelectedItem: function(e) {
+        this.searchString = e.detail.value;
+      },
+      /**
+       * clear search input
+       */
+      _handleClearSearchInputFields: function() {
+        this.searchString = null;
+      },
+
+      /**
+       * LIST VIEW
+       */
+      /**
+       * Open Edit Dialog
+       * @param e selected item
+       * @private
+       */
+      _handleToggleEditDialog: function(e) {
+        this.$.elEditDialog.toggleDialog(this, e.detail);
+      },
+      /**
+       * Open Delete Dialog
+       * @param e selected item
+       * @private
+       */
+      _handleToggleDeleteDialog: function(e) {
+        this.$.elDeleteDialog.toggleDialog(this, e.detail.value, e.detail.posInColl);
+      },
+
+      /**
+       * GLOBAL FUNCTIONS
+       */
+      /**
+       * load items from Firebase
+       */
+      loadUrlCollection: function() {
+        if (UserInfo.isLoginExpired(UserInfo.get(UserInfo.EXPIREDATE))) {
+          this.fire('login-expired');
+          return;
+        }
+        var id = UserInfo.get(UserInfo.USERID);
+        var fbdaoUrls = new FirebaseDAO(this, id);
+        fbdaoUrls.loadCollections('/urlcollector', 'urlCollection', 'keywordCollection');
+      },
+      /**
+       * clear URL listview
+       */
+      clearListview: function() {
+        this.$.elUrlListView.clearListview();
+      }
+    });
+  })();
+</script>

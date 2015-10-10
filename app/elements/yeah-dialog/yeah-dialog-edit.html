@@ -1,0 +1,116 @@
+<dom-module id='yeah-dialog-edit'>
+  <template>
+    <!-- Element Styling -->
+    <style>
+      :host {
+        display: block;
+      }
+      .style-edit-container {
+        @apply(--layout-vertical);
+        @apply(--layout-flex);
+        margin: 10px;
+        padding: 5px;
+      }
+    </style>
+    <!-- Element Markup -->
+    <paper-dialog
+      id='editDialog'
+      entry-animation='scale-up-animation'
+      exit-animation='fade-out-animation'
+      modal>
+      <h2>Edit Item: <span>[[item.id]]</span></h2>
+      <paper-dialog-scrollable>
+        <div class='style-edit-container'>
+          <paper-textarea id='txtValue' label='Url' value='[[item.value]]' rows='1' max-rows='3'></paper-textarea >
+          <paper-input id='txtKeywords' label='Keywords' value='[[item.keywords]]'></paper-input>
+        </div>
+      </paper-dialog-scrollable>
+      <div class='buttons'>
+        <paper-button dialog-dismiss autofocus>Cancel</paper-button>
+        <paper-button on-tap='_edit'>Edit</paper-button>
+      </div>
+    </paper-dialog>
+  </template>
+</dom-module>
+<!-- Element logic -->
+<script>
+  (function() {
+    Polymer({
+      is: 'yeah-dialog-edit',
+      /**
+       * PROPERTIES
+       */
+      properties: {
+        collection: {
+          type: String,
+          notify: true
+        },
+        kwCollection: {
+          type: String,
+          notify: true
+        },
+        route: {
+          type: String,
+          notify: true
+        },
+        context: {
+          type: Object
+        },
+        item: {
+          type: Object
+        }
+      },
+      /**
+       * PRIVATE FUNCTIONS
+       */
+      /**
+       * remove selected item from Firebase
+       * @param e
+       */
+      _edit: function() {
+        if (UserInfo.isLoginExpired(UserInfo.get(UserInfo.EXPIREDATE))) {
+          this.fire('login-expired');
+          return;
+        }
+
+        var userId = UserInfo.get(UserInfo.USERID);
+        var id = (this.item.id - 1);
+        var objId = this.item.objId;
+        var t = new Date(Date.now());
+
+        var editItem = {
+          'date': t.toLocaleDateString(),
+          'id': this.item.id,
+          'keywords': this.$.txtKeywords.value,
+          'objId': this.item.objId,
+          'time': t.toLocaleTimeString(),
+          'timestamp': t,
+          'value': this.$.txtValue.value
+        };
+
+        new FirebaseDAO(this.context, userId).editItemFromCollection(this.route, id, objId, editItem)
+          .then(function(obj) {
+            this.fire('edit-item-successful', obj);
+          }.bind(this))
+          .catch(function(err) {
+            this.fire('edit-item-failed', err);
+          }.bind(this));
+      },
+      /**
+       * PUBLIC FUNCTIONS
+       */
+      /**
+       * Open Dialog
+       * @param ctx
+       * @param i item to delete
+       */
+      toggleDialog: function(ctx, i) {
+        if (ctx !== undefined && i !== undefined) {
+          this.context = ctx;
+          this.item = i;
+        }
+        this.$.editDialog.toggle()
+      }
+    });
+  })();
+</script>

@@ -1,26 +1,71 @@
-var Util = {
+var Util = (function() {
   /**
-   * util function to extract the user name from the emailaddress
-   * @param email
-   * @returns {String}
+   * Instance stores a reference to the Singleton
    */
-  getUsernameFromMailAddress: function(email) {
-    return email.split('@')[0];
-  },
+  var instance;
   /**
-   * get current timestamp
-   * @return {number}
-   * @private
+   * public Util functions
+   * @return {{toggleMenuItems: toggleMenuItems}}
    */
-  _getCurrentTimestamp: function() {
-    return Math.round(new Date().getTime() / 1000.0);
-  },
-  /**
-   * check if user login is expired
-   * @param expireDate
-   * @return {boolean}
-   */
-  isUserLoginExpired: function(expireDate) {
-    return expireDate === null || this._getCurrentTimestamp() >= expireDate;
+  function init() {
+    /**
+     * toggle single Menu Item
+     * @param mItem
+     * @private
+     */
+    function _toggleMI(mItem) {
+      if (mItem.classList.contains('show-menu-item')) {
+        mItem.classList.remove('show-menu-item');
+        mItem.classList.add('hide-menu-item');
+      } else {
+        mItem.classList.remove('hide-menu-item');
+        mItem.classList.add('show-menu-item');
+      }
+    }
+    /**
+     * toggle all Menu Items
+     * @param menuItemLogin
+     * @param menuItemUrls
+     * @param menuItemNotes
+     */
+    function toggleMenuItems(menuItemLogin, menuItemUrls, menuItemNotes) {
+      _toggleMI(menuItemLogin);
+      _toggleMI(menuItemUrls);
+      _toggleMI(menuItemNotes);
+    }
+    /**
+     * show info toast
+     * @param toast
+     * @param text
+     * @param bgColor
+     * @param color
+     */
+    function showToast(toast, text, bgColor, color) {
+      toast.text = text;
+      toast.style.background = bgColor;
+      toast.style.color = color;
+      toast.toggle();
+    }
+    /**
+     * provide functions to the public
+     */
+    return {
+      toggleMenuItems : toggleMenuItems,
+      showToast       : showToast
+    };
   }
-};
+
+  return {
+    /**
+     * Get the Singleton instance if one exists
+     * or create one if it doesn't
+     * @return {Object} instance
+     */
+    getInstance: function() {
+      if (!instance) {
+        instance = init();
+      }
+      return instance;
+    }
+  };
+})();

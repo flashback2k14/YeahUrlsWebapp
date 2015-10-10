@@ -1,0 +1,118 @@
+<dom-module id='yeah-search'>
+  <style>
+    :host {
+      display: block;
+    }
+    .search-container {
+      width: 100%;
+      @apply(--layout-horizontal);
+    }
+    .search-input {
+      marign-left: 15px;
+      margin-right: 10px;
+      --paper-input-container-color: var(--text-primary-color);
+      --paper-input-container-focus-color: var(--text-primary-color);
+      --paper-input-container-input-color: var(--text-primary-color);
+      @apply(--layout-flex);
+    }
+    .style-dropdown {
+      margin-top: -8px;
+      --paper-input-container-color: var(--text-primary-color);
+      --paper-input-container-focus-color: var(--text-primary-color);
+      --paper-input-container-input-color: var(--text-primary-color);
+    }
+    .clear-search {
+      margin-top: 25px;
+    }
+
+  </style>
+  <template>
+    <paper-material elevation='3'>
+      <paper-toolbar>
+        <div class='search-container'>
+          <paper-input
+            id='txtSearch'
+            class='search-input'
+            label='Search'
+            type='text'
+            value='{{searchStr}}'
+            on-change='_searchInputChanged'>
+          </paper-input>
+          <paper-dropdown-menu
+            id='keywordsDropdown'
+            class='style-dropdown'
+            label='Keywords'
+            on-paper-dropdown-close='_dropDownClosed'>
+            <paper-menu
+              class='dropdown-content'
+              selected='0'>
+              <template
+                is='dom-repeat'
+                items='{{keywords}}'
+                as='keyword'>
+                <paper-item>[[keyword]]</paper-item>
+              </template>
+            </paper-menu>
+          </paper-dropdown-menu>
+          <paper-icon-button
+            class='clear-search'
+            icon='yeah-icons:clear'
+            on-tap='_clearSearch'>
+          </paper-icon-button>
+        </div>
+      </paper-toolbar>
+    </paper-material>
+  </template>
+</dom-module>
+
+<script>
+  (function() {
+    Polymer({
+      is: 'yeah-search',
+      /**
+       * element attributes
+       */
+      properties: {
+        searchStr: {
+          type: String,
+          notify: true
+        },
+        keywords: {
+          type: Array,
+          notify: true
+        }
+      },
+      /**
+       *
+       * @private
+       */
+      _searchInputChanged: function() {
+        this.fire('search-input-changed', { value: this.$.txtSearch.value });
+      },
+      /**
+       *
+       * @private
+       */
+      _dropDownClosed: function() {
+        var menuItemList = this.$$('paper-dropdown-menu').children[0].children[1].children[0].children[0].children[0].children[0].children;
+        for (var i = 0; i < menuItemList.length; i++) {
+          if (menuItemList[i].classList.contains('iron-selected')) {
+            var selectedItem = menuItemList[i].innerHTML.trim();
+            this.$.txtSearch.value = selectedItem;
+            this.fire('drop-down-selected-item', { value: selectedItem });
+            break;
+          }
+        }
+      },
+      /**
+       *
+       * @private
+       */
+      _clearSearch: function() {
+        this.$.txtSearch.value = '';
+        this.$.keywordsDropdown.contentElement.selected = 0;
+        this.fire('clear-search-input-fields');
+      }
+    });
+  })();
+</script>

@@ -7,7 +7,7 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-<script src="../../bower_components/page/page.js"></script>
+<script src='../../bower_components/page/page.js'></script>
 <script>
   window.addEventListener('WebComponentsReady', function() {
     // We use Page.js for routing. This is a Micro
@@ -16,8 +16,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     page('/', function () {
       app.route = 'login';
     });
-    page('/overview', function () {
-      app.route = 'overview';
+    page('/urls', function () {
+      app.route = 'urls';
     });
     page('/notes', function () {
       app.route = 'notes';

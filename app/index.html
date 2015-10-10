@@ -17,11 +17,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <title>Yeah! URLs Webapp</title>
   <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
   <!-- Chrome for Android theme color -->
-  <meta name="theme-color" content="#009688">
+  <meta name="theme-color" content="#083D56">
   <!-- Web Application Manifest -->
   <link rel="manifest" href="manifest.json">
   <!-- Tile color for Win8 -->
-  <meta name="msapplication-TileColor" content="#009688">
+  <meta name="msapplication-TileColor" content="#083D56">
   <!-- Add to homescreen for Chrome on Android -->
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="application-name" content="Yeah! URLs Webapp">
@@ -61,16 +61,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         </paper-toolbar>
         <!-- Drawer Content -->
         <paper-menu class="list" attr-for-selected="data-route" selected="{{route}}" on-iron-select="onMenuSelect">
-          <a data-route="login" href="/">
-            <iron-icon icon="social:person-outline"></iron-icon>
+          <a data-route="login" id="menuItemLogin" class="show-menu-item" href="/">
+            <iron-icon icon="yeah-icons:person-outline"></iron-icon>
             <span>Login</span>
           </a>
-          <a data-route="overview" href="/overview">
-            <iron-icon icon="list"></iron-icon>
+          <a data-route="urls" id="menuItemUrls" class="hide-menu-item" href="/urls">
+            <iron-icon icon="yeah-icons:list"></iron-icon>
             <span>My URLs</span>
           </a>
-          <a data-route="notes" href="/notes">
-            <iron-icon icon="note-add"></iron-icon>
+          <a data-route="notes" id="menuItemNotes" class="hide-menu-item" href="/notes">
+            <iron-icon icon="yeah-icons:note-add"></iron-icon>
             <span>My Notes</span>
           </a>
         </paper-menu>
@@ -79,10 +79,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <paper-header-panel main mode="standard">
         <!-- Main Toolbar -->
         <paper-toolbar id="mainToolbar">
-          <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
+          <paper-icon-button id="paperToggle" icon="yeah-icons:menu" paper-drawer-toggle></paper-icon-button>
           <span class="flex"></span>
           <!-- Toolbar icons-->
-          <paper-icon-button id="btnLogout" icon="eject" on-click="logoutUser"></paper-icon-button>
+          <paper-icon-button id="btnLogout" icon="yeah-icons:eject" on-click="logoutUser"></paper-icon-button>
           <!-- Application name -->
           <div class="middle paper-font-display1 app-name">Yeah! URLs Webapp</div>
           <!-- Application sub title -->
@@ -93,30 +93,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           <iron-pages attr-for-selected="data-route" selected="{{route}}">
             <section data-route="login">
               <paper-material id="pmLogin" elevation="5">
-                <my-login id="elLogin"
+                <yeah-login id="elLogin"
                           on-login-successful="handleLoginSuccessful"
                           on-login-failed="handleLoginFailed">
-                </my-login>
+                </yeah-login>
               </paper-material>
             </section>
 
-            <section data-route="overview">
-              <paper-material id="pmOverview" elevation="5">
-                <my-overview id="elOverview"
-                             on-login-expired="handleLoginExpired"
-                             on-remove-item-successful="handleRemoveItemSuccessful"
-                             on-remove-item-failed="handleRemoveItemFailed">
-                </my-overview>
+            <section data-route="urls">
+              <paper-material id="pmUrls" elevation="5">
+                <yeah-urls id="elUrls"
+                           on-login-expired="handleLoginExpired"
+                           on-edit-item-successful="handleEditItemSuccessful"
+                           on-edit-item-failed="handleEditItemFailed"
+                           on-remove-item-successful="handleRemoveItemSuccessful"
+                           on-remove-item-failed="handleRemoveItemFailed">
+                </yeah-urls>
               </paper-material>
             </section>
 
             <section data-route="notes">
               <paper-material id="pmNotes" elevation="5">
-                <my-notes id="elNotes"
+                <yeah-notes id="elNotes"
                           on-login-expired="handleLoginExpired"
                           on-remove-item-successful="handleRemoveItemSuccessful"
                           on-remove-item-failed="handleRemoveItemFailed">
-                </my-notes>
+                </yeah-notes>
               </paper-material>
             </section>
           </iron-pages>
@@ -131,10 +133,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   </template>
   <!-- build:js scripts/app.js -->
   <script src="scripts/app.js"></script>
-  <script src="scripts/user-info.js"></script>
+  <!-- endbuild-->
+  <!-- build:js scripts/auth.js -->
+  <script src="scripts/auth.js"></script>
+  <!-- endbuild-->
+  <!-- build:js scripts/firebase-prototype-dao.js -->
+  <script src="scripts/firebase-prototype-dao.js"></script>
+  <!-- endbuild-->
+  <!-- build:js scripts/util.js -->
   <script src="scripts/util.js"></script>
   <!-- endbuild-->
+  <!-- build:js scripts/user-info.js -->
+  <script src="scripts/user-info.js"></script>
+  <!-- endbuild-->
   <!--firebase-->
-  <script src='https://cdn.firebase.com/js/client/2.2.9/firebase.js'></script>
+  <script src='https://cdn.firebase.com/js/client/2.3.1/firebase.js'></script>
 </body>
 </html>

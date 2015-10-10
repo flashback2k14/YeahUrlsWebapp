@@ -15,8 +15,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   var tbUsername = null;
   var tbUserEmailAddress = null;
   var imgUserProfilePicture = null;
+  var menuItemLogin = null;
+  var menuItemUrls = null;
+  var menuItemNotes = null;
   var infoToast = null;
-  var elOverview = null;
+  var elUrls = null;
   var elNotes = null;
 
   app.addEventListener('dom-change', function() {
@@ -25,25 +28,30 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   window.addEventListener('WebComponentsReady', function() {
     docReady = true;
-    //
+    // get elements from dom
     tbUsername = document.querySelector('#tbUserName');
     tbUserEmailAddress = document.querySelector('#tbUserEmailAddress');
     imgUserProfilePicture = document.querySelector('#imgUserProfilePicture');
+    menuItemLogin = document.querySelector('#menuItemLogin');
+    menuItemUrls = document.querySelector('#menuItemUrls');
+    menuItemNotes = document.querySelector('#menuItemNotes');
     infoToast = document.querySelector('#info-toast');
-    elOverview = document.querySelector('#elOverview');
+    elUrls = document.querySelector('#elUrls');
     elNotes = document.querySelector('#elNotes');
-    //
-    if (Util.isUserLoginExpired(UserInfo.get(UserInfo.EXPIREDATE))) {
+    // check if user login is expired
+    if (UserInfo.isLoginExpired(UserInfo.get(UserInfo.EXPIREDATE))) {
       app.route = 'login';
     } else {
       tbUsername.innerHTML = UserInfo.get(UserInfo.USERNAME);
       tbUserEmailAddress.innerHTML = UserInfo.get(UserInfo.EMAILADDRESS);
       imgUserProfilePicture.src = UserInfo.get(UserInfo.PROFILEIMAGE);
-      //
-      app.route = 'overview';
-      //
-      elOverview.reloadOverview();
-      elNotes.reloadNotes();
+      // toggle menu drawer items
+      Util.getInstance().toggleMenuItems(menuItemLogin, menuItemUrls, menuItemNotes);
+      // go to urls page
+      app.route = 'urls';
+      // load data from firebase
+      elUrls.loadUrlCollection();
+      elNotes.loadNotesCollection();
     }
   });
 
@@ -59,7 +67,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     switch(userObj.provider) {
       case 'password':
         userEmailAddress = userObj.password.email;
-        userName = Util.getUsernameFromMailAddress(userEmailAddress);
+        userName = UserInfo.getUsernameFromMailAddress(userEmailAddress);
         userProfilePicture = userObj.password.profileImageURL;
         break;
     }
@@ -73,73 +81,77 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     tbUsername.innerHTML = userName;
     tbUserEmailAddress.innerHTML = userEmailAddress;
     imgUserProfilePicture.src = userProfilePicture;
+    // toggle Menu Items
+    Util.getInstance().toggleMenuItems(menuItemLogin, menuItemUrls, menuItemNotes);
     // go to the home element
-    app.route = 'overview';
+    app.route = 'urls';
     // Load Url and Note Collection
-    elOverview.reloadOverview();
-    elNotes.reloadNotes();
+    elUrls.loadUrlCollection();
+    elNotes.loadNotesCollection();
     // show toast to inform the user
-    infoToast.text = 'User ' + userEmailAddress + ' is logged in!';
-    infoToast.style.background = '#2EB82E';
-    infoToast.style.color = '#EEEEEE';
-    infoToast.toggle();
+    Util.getInstance()
+      .showToast(infoToast, 'User ' + userEmailAddress + ' is logged in!', '#2EB82E', '#EEEEEE');
   };
 
   app.handleLoginFailed = function(e) {
     // show toast to inform the user
     var errorObj = e.detail;
-    infoToast.text = 'Login failed! Please retry! Error Code: ' + errorObj.code + ', Error: ' + errorObj.message;
-    infoToast.style.background = '#FF3333';
-    infoToast.style.color = '#EEEEEE';
-    infoToast.toggle();
+    Util.getInstance()
+      .showToast(infoToast, 'Login failed! Please retry! Error Code: ' + errorObj.code + ', Error: ' + errorObj.message, '#FF3333', '#EEEEEE');
   };
 
   app.handleLoginExpired = function() {
-    infoToast.text = 'Login is expired! Please log in!';
-    infoToast.style.background = '#FF3333';
-    infoToast.style.color = '#EEEEEE';
-    infoToast.toggle();
-    //
+    Util.getInstance()
+      .showToast(infoToast, 'Login is expired! Please log in!', '#FF3333', '#EEEEEE');
+    // go to login page
     app.route = 'login';
   };
 
+  app.handleEditItemSuccessful = function(e) {
+    var successObj = e.detail.detail;
+    if (successObj)
+      Util.getInstance().showToast(infoToast, 'URL Item ' + successObj.value + '.', '#2EB82E', '#EEEEEE');
+  };
+
+  app.handleEditItemFailed = function(e) {
+    var errorObj = e.detail.detail;
+    if (errorObj)
+      Util.getInstance().showToast(infoToast, 'Edit URL Item is failed! Error: ' + errorObj.value, '#FF3333', '#EEEEEE');
+  };
+
   app.handleRemoveItemSuccessful = function(e) {
-    var successObj = e.detail;
-    infoToast.text = 'URL Item ' + successObj.value + ' was successful';
-    infoToast.style.background = '#2EB82E';
-    infoToast.style.color = '#EEEEEE';
-    infoToast.toggle();
+    var successObj = e.detail.detail;
+    if (successObj)
+      Util.getInstance().showToast(infoToast, 'URL Item ' + successObj.value + '.', '#2EB82E', '#EEEEEE');
   };
 
   app.handleRemoveItemFailed = function(e) {
-    var errorObj = e.detail;
-    infoToast.text = 'Remove URL Item is failed! Error: ' + errorObj.value;
-    infoToast.style.background = '#FF3333';
-    infoToast.style.color = '#EEEEEE';
-    infoToast.toggle();
+    var errorObj = e.detail.detail;
+    if (errorObj)
+      Util.getInstance().showToast(infoToast, 'Remove URL Item is failed! Error: ' + errorObj.value, '#FF3333', '#EEEEEE');
   };
 
   app.logoutUser = function() {
-    infoToast.text = 'Logging out...';
-    infoToast.toggle();
-    //
-    var rootRef = new Firebase('https://yeah-url-extension.firebaseio.com/');
-    rootRef.unauth();
+    Util.getInstance()
+      .showToast(infoToast, 'Logging out...', '#333333', '#EEEEEE');
+    // log user out
+    Auth.getInstance().logout();
     // set Placedolder to toolbar menu
     tbUsername.innerHTML = 'Your Username...';
     tbUserEmailAddress.innerHTML = 'Your Emailaddress...';
     imgUserProfilePicture.src = '../images/touch/icon-128x128.png';
-    //
-    UserInfo.deleteAll();
-    elOverview.clearListview();
+    // toggle Menu Items
+    Util.getInstance().toggleMenuItems(menuItemLogin, menuItemUrls, menuItemNotes);
+    // delete localStorage and clear listviews
+    UserInfo.deleteAllItems();
+    elUrls.clearListview();
     elNotes.clearListview();
-    //
+    // go to login page
     app.route = 'login';
   };
 
   app.onMenuSelect = function() {
     var drawerPanel = document.querySelector('#paperDrawerPanel');
-
     if (docReady) {
       if (drawerPanel.narrow) {
         drawerPanel.closeDrawer();

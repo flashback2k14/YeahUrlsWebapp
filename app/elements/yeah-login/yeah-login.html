@@ -1,0 +1,93 @@
+<dom-module id='yeah-login'>
+  <template>
+    <!-- Element Styling -->
+    <style>
+      :host {
+        display: block;
+      }
+      .input-container {
+        width: 100%;
+        margin: 20px;
+      }
+      .inputs {
+        --paper-input-container-input-color: var(--dark-primary-color);
+      }
+      .btn-login {
+        margin-top: 15px;
+        margin-right: 0;
+        background: var(--default-primary-color);
+        color: var(--text-primary-color);
+        float: right;
+      }
+      paper-material {
+        width: 340px;
+      }
+      paper-toolbar {
+        width: 100%;
+      }
+    </style>
+    <!-- Element Markup -->
+    <paper-material elevation='3'>
+      <paper-toolbar>
+        <h1 class='paper-font-display1'><span>Login</span></h1>
+      </paper-toolbar>
+    </paper-material>
+    <div class='input-container'>
+      <paper-input
+        class='inputs'
+        id='txtEmailaddress'
+        label='Emailaddress'
+        type='text'
+        value='{{emailAddress}}'>
+      </paper-input>
+      <paper-input
+        class='inputs'
+        id='txtPassword'
+        label='Password'
+        type='password'
+        value='{{password}}'>
+      </paper-input>
+      <paper-button
+        class='btn-login'
+        raised
+        on-tap='submitLogin'>Login
+      </paper-button>
+    </div>
+  </template>
+</dom-module>
+<!-- Element Logic -->
+<script>
+  (function() {
+    Polymer({
+      is: 'yeah-login',
+      /**
+       * Clear input fields
+       * @param clearBoth
+       * @private
+       */
+      _clearInputs: function(clearBoth) {
+        if (clearBoth) this.$.txtEmailaddress.value = '';
+        else this.$.txtPassword.value = '';
+      },
+      /**
+       * Login to firebase db
+       */
+      submitLogin: function() {
+        var user = {
+          'email': this.$.txtEmailaddress.value,
+          'password': this.$.txtPassword.value
+        };
+
+        Auth.getInstance().authWithPassword(user)
+          .then(function(user){
+            this._clearInputs(true);
+            this.fire('login-successful', user);
+          }.bind(this))
+          .catch(function(err){
+            this._clearInputs(false);
+            this.fire('login-failed', err);
+          }.bind(this));
+      }
+    });
+  })();
+</script>
