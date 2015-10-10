@@ -62,15 +62,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         <!-- Drawer Content -->
         <paper-menu class="list" attr-for-selected="data-route" selected="{{route}}" on-iron-select="onMenuSelect">
           <a data-route="login" id="menuItemLogin" class="show-menu-item" href="/">
-            <iron-icon icon="social:person-outline"></iron-icon>
+            <iron-icon icon="yeah-icons:person-outline"></iron-icon>
             <span>Login</span>
           </a>
           <a data-route="urls" id="menuItemUrls" class="hide-menu-item" href="/urls">
-            <iron-icon icon="list"></iron-icon>
+            <iron-icon icon="yeah-icons:list"></iron-icon>
             <span>My URLs</span>
           </a>
           <a data-route="notes" id="menuItemNotes" class="hide-menu-item" href="/notes">
-            <iron-icon icon="note-add"></iron-icon>
+            <iron-icon icon="yeah-icons:note-add"></iron-icon>
             <span>My Notes</span>
           </a>
         </paper-menu>
@@ -79,10 +79,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <paper-header-panel main mode="standard">
         <!-- Main Toolbar -->
         <paper-toolbar id="mainToolbar">
-          <paper-icon-button id="paperToggle" icon="menu" paper-drawer-toggle></paper-icon-button>
+          <paper-icon-button id="paperToggle" icon="yeah-icons:menu" paper-drawer-toggle></paper-icon-button>
           <span class="flex"></span>
           <!-- Toolbar icons-->
-          <paper-icon-button id="btnLogout" icon="eject" on-click="logoutUser"></paper-icon-button>
+          <paper-icon-button id="btnLogout" icon="yeah-icons:eject" on-click="logoutUser"></paper-icon-button>
           <!-- Application name -->
           <div class="middle paper-font-display1 app-name">Yeah! URLs Webapp</div>
           <!-- Application sub title -->

@@ -57,13 +57,13 @@
       }
     </style>
     <!-- Element Markup -->
-    <paper-material class="style-card" elevation="3">
+    <paper-material class='style-card' elevation='3'>
       <paper-toolbar>
         <h3><span>{{itemTitle}}</span></h3>
       </paper-toolbar>
-      <paper-fab class='style-card-fab-edit' mini icon='create' on-tap='_openEditDialog'></paper-fab>
-      <paper-fab class="style-card-fab-delete" mini icon="clear" on-click="remove"></paper-fab>
-      <p><a href="{{item.value}}" target="_blank">{{item.value}}</a></p>
+      <paper-fab class='style-card-fab-edit' mini icon='yeah-icons:create' on-tap='_openEditDialog'></paper-fab>
+      <paper-fab class='style-card-fab-delete' mini icon='yeah-icons:clear' on-click='remove'></paper-fab>
+      <p><a href='{{item.value}}' target='_blank'>{{item.value}}</a></p>
       <p><strong>{{item.keywords}}</strong></p>
     </paper-material>
   </template>
@@ -97,7 +97,7 @@
         if (typeof date === 'undefined' && typeof time === 'undefined') {
           this.itemTitle = title;
         } else {
-          this.itemTitle = "Date: " + date + ", " + time;
+          this.itemTitle = 'Date: ' + date + ', ' + time;
         }
       },
       /**
