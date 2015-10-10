@@ -46,136 +46,137 @@
       on-toggle-delete-dialog='_handleToggleDeleteDialog'>
     </yeah-listview>
   </template>
-</dom-module>
+  <!-- Element Logic -->
+  <script>
+    (function() {
+      Polymer({
+        is: 'yeah-notes',
 
-<script>
-  (function() {
-    Polymer({
-      is: 'yeah-notes',
-
-      /**
-       * PRIVATE FUNCTIONS
-       */
-      /**
-       * handle expired Login
-       * @private
-       */
-      _handleLoginExpired: function() {
-        this.$.elDeleteDialog.toggleDialog();
-        this.fire('login-expired');
-      },
-
-      /**
-       * EDIT DIALOG
-       */
-      /**
-       * handle edit item successful
-       * @param e
-       * @private
-       */
-      _handleEditItemSuccessful: function(e) {
-        this.$.elEditDialog.toggleDialog();
-        this.fire('edit-item-successful', e);
-      },
-      /**
-       * handle edit item failed
-       * @param e
-       * @private
-       */
-      _handleEditItemFailed: function(e) {
-        this.$.elEditDialog.toggleDialog();
-        this.fire('edit-item-failed', e);
-      },
-
-      /**
-       * DELETE DIALOG
-       */
-      /**
-       * handle delete item successful
-       * @param e
-       * @private
-       */
-      _handleDeleteItemSuccessful: function(e) {
-        this.$.elDeleteDialog.toggleDialog();
-        this.fire('remove-item-successful', e);
-      },
-      /**
-       * handle delete item failed
-       * @param e
-       * @private
-       */
-      _handleDeleteItemFailed: function(e) {
-        this.$.elDeleteDialog.toggleDialog();
-        this.fire('remove-item-failed', e);
-      },
-
-      /**
-       * SEARCH VIEW
-       */
-      /**
-       * Handle Search Input Value from Yeah-Search
-       * @param e
-       * @private
-       */
-      _handleSearchInputChanged: function(e) {
-        this.searchString = e.detail.value;
-      },
-      /**
-       * get selected drop down item
-       * @param e {Object}
-       * @private
-       */
-      _handleDropDownSelectedItem: function(e) {
-        this.searchString = e.detail.value;
-      },
-      /**
-       * clear search input
-       */
-      _handleClearSearchInputFields: function() {
-        this.searchString = null;
-      },
-
-      /**
-       * LIST VIEW
-       */
-      /**
-       * Open Edit Dialog
-       * @param e selected item
-       * @private
-       */
-      _handleToggleEditDialog: function(e) {
-        this.$.elEditNotesDialog.toggleDialog(this, e.detail);
-      },
-      /**
-       * Open Delete Dialog
-       * @param e selected item
-       * @private
-       */
-      _handleToggleDeleteDialog: function(e) {
-        this.$.elDeleteNotesDialog.toggleDialog(this, e.detail.value, e.detail.posInColl);
-      },
-
-      /**
-       * GLOBAL FUNCTIONS
-       */
-      /**
-       * load items from Firebase
-       */
-      loadNotesCollection: function() {
-        if (UserInfo.isLoginExpired(UserInfo.get(UserInfo.EXPIREDATE))) {
+        /**
+         * PRIVATE FUNCTIONS
+         */
+        /**
+         * handle expired Login
+         * @private
+         */
+        _handleLoginExpired: function() {
+          this.$.elDeleteDialog.toggleDialog();
           this.fire('login-expired');
-          return;
+        },
+
+        /**
+         * EDIT DIALOG
+         */
+        /**
+         * handle edit item successful
+         * @param e
+         * @private
+         */
+        _handleEditItemSuccessful: function(e) {
+          this.$.elEditDialog.toggleDialog();
+          this.fire('edit-item-successful', e);
+        },
+        /**
+         * handle edit item failed
+         * @param e
+         * @private
+         */
+        _handleEditItemFailed: function(e) {
+          this.$.elEditDialog.toggleDialog();
+          this.fire('edit-item-failed', e);
+        },
+
+        /**
+         * DELETE DIALOG
+         */
+        /**
+         * handle delete item successful
+         * @param e
+         * @private
+         */
+        _handleDeleteItemSuccessful: function(e) {
+          this.$.elDeleteDialog.toggleDialog();
+          this.fire('remove-item-successful', e);
+        },
+        /**
+         * handle delete item failed
+         * @param e
+         * @private
+         */
+        _handleDeleteItemFailed: function(e) {
+          this.$.elDeleteDialog.toggleDialog();
+          this.fire('remove-item-failed', e);
+        },
+
+        /**
+         * SEARCH VIEW
+         */
+        /**
+         * Handle Search Input Value from Yeah-Search
+         * @param e
+         * @private
+         */
+        _handleSearchInputChanged: function(e) {
+          this.searchString = e.detail.value;
+        },
+        /**
+         * get selected drop down item
+         * @param e {Object}
+         * @private
+         */
+        _handleDropDownSelectedItem: function(e) {
+          this.searchString = e.detail.value;
+        },
+        /**
+         * clear search input
+         */
+        _handleClearSearchInputFields: function() {
+          this.searchString = null;
+        },
+
+        /**
+         * LIST VIEW
+         */
+        /**
+         * Open Edit Dialog
+         * @param e selected item
+         * @private
+         */
+        _handleToggleEditDialog: function(e) {
+          this.$.elEditNotesDialog.toggleDialog(this, e.detail);
+        },
+        /**
+         * Open Delete Dialog
+         * @param e selected item
+         * @private
+         */
+        _handleToggleDeleteDialog: function(e) {
+          this.$.elDeleteNotesDialog.toggleDialog(this, e.detail.value, e.detail.posInColl);
+        },
+
+        /**
+         * GLOBAL FUNCTIONS
+         */
+        /**
+         * load items from Firebase
+         */
+        loadNotesCollection: function() {
+          let userInfo = new UserInfo();
+
+          if (userInfo.isLoginExpired(userInfo.getInfo(userInfo.expireDate))) {
+            this.fire('login-expired');
+            return;
+          }
+          var id = userInfo.getInfo(userInfo.userId);
+          new FirebaseDAO(this, id).loadCollections('/notescollector', 'notesCollection', 'notesKeywordCollection');
+        },
+        /**
+         * clear URL listview
+         */
+        clearListview: function() {
+          this.$.elNotesListView.clearListview();
         }
-        var id = UserInfo.get(UserInfo.USERID);
-        var fbdaoNotes = new FirebaseDAO(this, id);
-        fbdaoNotes.loadCollections('/notescollector', 'notesCollection', 'notesKeywordCollection');
-      },
-      /**
-       * clear URL listview
-       */
-      clearListview: function() {
-        this.$.elNotesListView.clearListview();
-      }
-    });
-  })();
-</script>
+      });
+    })();
+  </script>
+</dom-module>

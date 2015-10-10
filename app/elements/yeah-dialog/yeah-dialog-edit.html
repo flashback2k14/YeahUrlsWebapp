@@ -31,86 +31,86 @@
       </div>
     </paper-dialog>
   </template>
+  <!-- Element logic -->
+  <script>
+    (function() {
+      Polymer({
+        is: 'yeah-dialog-edit',
+        /**
+         * PROPERTIES
+         */
+        properties: {
+          collection: {
+            type: String,
+            notify: true
+          },
+          kwCollection: {
+            type: String,
+            notify: true
+          },
+          route: {
+            type: String,
+            notify: true
+          },
+          context: {
+            type: Object
+          },
+          item: {
+            type: Object
+          }
+        },
+        /**
+         * PRIVATE FUNCTIONS
+         */
+        /**
+         * remove selected item from Firebase
+         * @private
+         */
+        _edit: function() {
+          if (UserInfo.isLoginExpired(UserInfo.get(UserInfo.EXPIREDATE))) {
+            this.fire('login-expired');
+            return;
+          }
+
+          var userId = UserInfo.get(UserInfo.USERID);
+          var id = (this.item.id - 1);
+          var objId = this.item.objId;
+          var t = new Date(Date.now());
+
+          var editItem = {
+            'date': t.toLocaleDateString(),
+            'id': this.item.id,
+            'keywords': this.$.txtKeywords.value,
+            'objId': this.item.objId,
+            'time': t.toLocaleTimeString(),
+            'timestamp': t,
+            'value': this.$.txtValue.value
+          };
+
+          new FirebaseDAO(this.context, userId).editItemFromCollection(this.route, id, objId, editItem)
+            .then(function(obj) {
+              this.fire('edit-item-successful', obj);
+            }.bind(this))
+            .catch(function(err) {
+              this.fire('edit-item-failed', err);
+            }.bind(this));
+        },
+        /**
+         * PUBLIC FUNCTIONS
+         */
+        /**
+         * Open Dialog
+         * @param ctx
+         * @param i item to delete
+         */
+        toggleDialog: function(ctx, i) {
+          if (ctx !== undefined && i !== undefined) {
+            this.context = ctx;
+            this.item = i;
+          }
+          this.$.editDialog.toggle()
+        }
+      });
+    })();
+  </script>
 </dom-module>
-<!-- Element logic -->
-<script>
-  (function() {
-    Polymer({
-      is: 'yeah-dialog-edit',
-      /**
-       * PROPERTIES
-       */
-      properties: {
-        collection: {
-          type: String,
-          notify: true
-        },
-        kwCollection: {
-          type: String,
-          notify: true
-        },
-        route: {
-          type: String,
-          notify: true
-        },
-        context: {
-          type: Object
-        },
-        item: {
-          type: Object
-        }
-      },
-      /**
-       * PRIVATE FUNCTIONS
-       */
-      /**
-       * remove selected item from Firebase
-       * @param e
-       */
-      _edit: function() {
-        if (UserInfo.isLoginExpired(UserInfo.get(UserInfo.EXPIREDATE))) {
-          this.fire('login-expired');
-          return;
-        }
-
-        var userId = UserInfo.get(UserInfo.USERID);
-        var id = (this.item.id - 1);
-        var objId = this.item.objId;
-        var t = new Date(Date.now());
-
-        var editItem = {
-          'date': t.toLocaleDateString(),
-          'id': this.item.id,
-          'keywords': this.$.txtKeywords.value,
-          'objId': this.item.objId,
-          'time': t.toLocaleTimeString(),
-          'timestamp': t,
-          'value': this.$.txtValue.value
-        };
-
-        new FirebaseDAO(this.context, userId).editItemFromCollection(this.route, id, objId, editItem)
-          .then(function(obj) {
-            this.fire('edit-item-successful', obj);
-          }.bind(this))
-          .catch(function(err) {
-            this.fire('edit-item-failed', err);
-          }.bind(this));
-      },
-      /**
-       * PUBLIC FUNCTIONS
-       */
-      /**
-       * Open Dialog
-       * @param ctx
-       * @param i item to delete
-       */
-      toggleDialog: function(ctx, i) {
-        if (ctx !== undefined && i !== undefined) {
-          this.context = ctx;
-          this.item = i;
-        }
-        this.$.editDialog.toggle()
-      }
-    });
-  })();
-</script>

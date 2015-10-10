@@ -1,4 +1,6 @@
-var FirebaseDAO = function(component, uId) {
+'use strict';
+
+var FirebaseDAO = function FirebaseDAO(component, uId) {
   /**
    * Constuctor
    * context          = get context from element
@@ -18,16 +20,16 @@ var FirebaseDAO = function(component, uId) {
  * @param pathToItems
  * @param pathToKeywords
  */
-FirebaseDAO.prototype.loadCollections = function(route, pathToItems, pathToKeywords) {
+FirebaseDAO.prototype.loadCollections = function (route, pathToItems, pathToKeywords) {
   var dataRef = new Firebase(this.firebaseBaseUrl + this.userId + route);
-  dataRef.on('value', function(snapshot) {
+  dataRef.on('value', (function (snapshot) {
     this.context.set(pathToItems, []);
     this.context.set(pathToKeywords, []);
-    snapshot.forEach(function (child) {
+    snapshot.forEach((function (child) {
       this.context.push(pathToItems, this._extractKeywords(child.val(), pathToKeywords));
-    }.bind(this));
+    }).bind(this));
     //this._sortKeywords(pathToKeywords);
-  }.bind(this));
+  }).bind(this));
 };
 
 /**
@@ -36,7 +38,7 @@ FirebaseDAO.prototype.loadCollections = function(route, pathToItems, pathToKeywo
  * @param pathToKeywords
  * @private
  */
-FirebaseDAO.prototype._extractKeywords = function(items, pathToKeywords) {
+FirebaseDAO.prototype._extractKeywords = function (items, pathToKeywords) {
   var kw = items[0].keywords;
   if (this.context.get(pathToKeywords).length === 0) {
     this.context.push(pathToKeywords, '');
@@ -57,7 +59,7 @@ FirebaseDAO.prototype._extractKeywords = function(items, pathToKeywords) {
  * @param pathToKeywords
  * @private
  */
-FirebaseDAO.prototype._sortKeywords = function(pathToKeywords) {
+FirebaseDAO.prototype._sortKeywords = function (pathToKeywords) {
   var arr = this.context.get(pathToKeywords);
   this.context.set(pathToKeywords, []);
   this.context.set(pathToKeywords, arr.sort());
@@ -71,18 +73,18 @@ FirebaseDAO.prototype._sortKeywords = function(pathToKeywords) {
  * @param objId
  * @return {Promise}
  */
-FirebaseDAO.prototype.removeItemFromCollection = function(route, id, objId) {
-  return new Promise(function(resolve, reject) {
+FirebaseDAO.prototype.removeItemFromCollection = function (route, id, objId) {
+  return new Promise((function (resolve, reject) {
     var ref = new Firebase(this.firebaseBaseUrl + this.userId + route + '/' + objId + '/' + id);
-    var onComplete = function(error) {
+    var onComplete = function onComplete(error) {
       if (error) {
         reject(error);
       } else {
-        resolve({'value':'remove was successful'});
+        resolve({ 'value': 'remove was successful' });
       }
     };
     ref.remove(onComplete);
-  }.bind(this));
+  }).bind(this));
 };
 
 /**
@@ -92,16 +94,18 @@ FirebaseDAO.prototype.removeItemFromCollection = function(route, id, objId) {
  * @param objId
  * @param item
  */
-FirebaseDAO.prototype.editItemFromCollection = function(route, id, objId, item) {
-  return new Promise(function(resolve, reject) {
+FirebaseDAO.prototype.editItemFromCollection = function (route, id, objId, item) {
+  return new Promise((function (resolve, reject) {
     var ref = new Firebase(this.firebaseBaseUrl + this.userId + route + '/' + objId + '/' + id);
-    var onComplete = function(error) {
+    var onComplete = function onComplete(error) {
       if (error) {
         reject(error);
       } else {
-        resolve({'value':'edit was successful'});
+        resolve({ 'value': 'edit was successful' });
       }
     };
     ref.update(item, onComplete);
-  }.bind(this));
+  }).bind(this));
 };
+
+//# sourceMappingURL=firebase-prototype-dao-compiled.js.map

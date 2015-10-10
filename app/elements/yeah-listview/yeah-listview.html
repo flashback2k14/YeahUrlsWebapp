@@ -64,87 +64,87 @@
       </template>
     </div>
   </template>
-</dom-module>
-<!-- Element Logic -->
-<script>
-  (function() {
-    Polymer({
-      is: 'yeah-listview',
+  <!-- Element Logic -->
+  <script>
+    (function() {
+      Polymer({
+        is: 'yeah-listview',
 
-      properties: {
-        collection: {
-          type: Array,
-          value: [],
-          notify: true
+        properties: {
+          collection: {
+            type: Array,
+            value: [],
+            notify: true
+          },
+          keywordCollection: {
+            type: Array,
+            value: [],
+            notify: true
+          },
+          searchString: {
+            type: String,
+            value: '',
+            notify: true
+          }
         },
-        keywordCollection: {
-          type: Array,
-          value: [],
-          notify: true
+
+        /**
+         * Check if Item as an Id
+         * @param item
+         * @return {boolean}
+         * @private
+         */
+        _hasItemId: function(item) {
+          return item.hasOwnProperty('id');
         },
-        searchString: {
-          type: String,
-          value: '',
-          notify: true
-        }
-      },
+        /**
+         * Search for matching Items
+         * @param item
+         * @param searchStr
+         * @return {Object, Array}
+         * @private
+         */
+        _searchForItems: function(item, searchStr) {
+          if (searchStr === null ||typeof searchStr === 'undefined') {
+            return item;
+          } else {
+            return item.value.toLowerCase().match(searchStr.toLowerCase()) || item.keywords.toUpperCase().match(searchStr.toUpperCase());
+          }
+        },
 
-      /**
-       * Check if Item as an Id
-       * @param item
-       * @return {boolean}
-       * @private
-       */
-      _hasItemId: function(item) {
-        return item.hasOwnProperty('id');
-      },
-      /**
-       * Search for matching Items
-       * @param item
-       * @param searchStr
-       * @return {Object, Array}
-       * @private
-       */
-      _searchForItems: function(item, searchStr) {
-        if (searchStr === null ||typeof searchStr === 'undefined') {
-          return item;
-        } else {
-          return item.value.toLowerCase().match(searchStr.toLowerCase()) || item.keywords.toUpperCase().match(searchStr.toUpperCase());
-        }
-      },
+        _handleOpenEditDialog: function(e) {
+          this.fire('toggle-edit-dialog', e.model.item);
+        },
 
-      _handleOpenEditDialog: function(e) {
-        this.fire('toggle-edit-dialog', e.model.item);
-      },
+        _handleOpenDeleteDialog: function(e) {
+          var item = {
+            'value': e.model.item,
+            'posInColl': this._getPositionInCollection(e.model.item)
+          };
+          this.fire('toggle-delete-dialog', item);
+        },
 
-      _handleOpenDeleteDialog: function(e) {
-        var item = {
-          'value': e.model.item,
-          'posInColl': this._getPositionInCollection(e.model.item)
-        };
-        this.fire('toggle-delete-dialog', item);
-      },
-
-      /**
-       * Get Array Position from removed Item
-       * @param obj
-       * @private
-       */
-      _getPositionInCollection: function(obj) {
-        for (var i = 0; i < this.collection.length; i++) {
-          for (var j = 0; j < this.collection[i].length; j++) {
-            if (obj === this.collection[i][j]) {
-              return i;
+        /**
+         * Get Array Position from removed Item
+         * @param obj
+         * @private
+         */
+        _getPositionInCollection: function(obj) {
+          for (var i = 0; i < this.collection.length; i++) {
+            for (var j = 0; j < this.collection[i].length; j++) {
+              if (obj === this.collection[i][j]) {
+                return i;
+              }
             }
           }
-        }
-        return -1;
-      },
+          return -1;
+        },
 
-      clearListview: function() {
-        var listView = document.querySelector('#divOverview');
-        if (listView !== null) listView.innerHTML = '';
-      }
-    });
-  })();
-</script>
+        clearListview: function() {
+          var listView = document.querySelector('#divOverview');
+          if (listView !== null) listView.innerHTML = '';
+        }
+      });
+    })();
+  </script>
+</dom-module>

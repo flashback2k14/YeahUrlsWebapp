@@ -54,40 +54,40 @@
       </paper-button>
     </div>
   </template>
-</dom-module>
-<!-- Element Logic -->
-<script>
-  (function() {
-    Polymer({
-      is: 'yeah-login',
-      /**
-       * Clear input fields
-       * @param clearBoth
-       * @private
-       */
-      _clearInputs: function(clearBoth) {
-        if (clearBoth) this.$.txtEmailaddress.value = '';
-        else this.$.txtPassword.value = '';
-      },
-      /**
-       * Login to firebase db
-       */
-      submitLogin: function() {
-        var user = {
-          'email': this.$.txtEmailaddress.value,
-          'password': this.$.txtPassword.value
-        };
+  <!-- Element Logic -->
+  <script>
+    (function() {
+      Polymer({
+        is: 'yeah-login',
+        /**
+         * Clear input fields
+         * @param clearBoth
+         * @private
+         */
+        _clearInputs: function(clearBoth) {
+          if (clearBoth) this.$.txtEmailaddress.value = '';
+          else this.$.txtPassword.value = '';
+        },
+        /**
+         * Login to firebase db
+         */
+        submitLogin: function() {
+          var user = {
+            'email': this.$.txtEmailaddress.value,
+            'password': this.$.txtPassword.value
+          };
 
-        Auth.getInstance().authWithPassword(user)
-          .then(function(user){
-            this._clearInputs(true);
-            this.fire('login-successful', user);
-          }.bind(this))
-          .catch(function(err){
-            this._clearInputs(false);
-            this.fire('login-failed', err);
-          }.bind(this));
-      }
-    });
-  })();
-</script>
+          Auth.authWithEmailaddress(user)
+            .then(function(user){
+              this._clearInputs(true);
+              this.fire('login-successful', user);
+            }.bind(this))
+            .catch(function(err){
+              this._clearInputs(false);
+              this.fire('login-failed', err);
+            }.bind(this));
+        }
+      });
+    })();
+  </script>
+</dom-module>

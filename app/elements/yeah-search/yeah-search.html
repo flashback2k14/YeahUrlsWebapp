@@ -1,32 +1,34 @@
 <dom-module id='yeah-search'>
-  <style>
-    :host {
-      display: block;
-    }
-    .search-container {
-      width: 100%;
-      @apply(--layout-horizontal);
-    }
-    .search-input {
-      marign-left: 15px;
-      margin-right: 10px;
-      --paper-input-container-color: var(--text-primary-color);
-      --paper-input-container-focus-color: var(--text-primary-color);
-      --paper-input-container-input-color: var(--text-primary-color);
-      @apply(--layout-flex);
-    }
-    .style-dropdown {
-      margin-top: -8px;
-      --paper-input-container-color: var(--text-primary-color);
-      --paper-input-container-focus-color: var(--text-primary-color);
-      --paper-input-container-input-color: var(--text-primary-color);
-    }
-    .clear-search {
-      margin-top: 25px;
-    }
-
-  </style>
   <template>
+    <!-- Element Styling -->
+    <style>
+      :host {
+        display: block;
+      }
+      .search-container {
+        width: 100%;
+      @apply(--layout-horizontal);
+      }
+      .search-input {
+        marign-left: 15px;
+        margin-right: 10px;
+        --paper-input-container-color: var(--text-primary-color);
+        --paper-input-container-focus-color: var(--text-primary-color);
+        --paper-input-container-input-color: var(--text-primary-color);
+      @apply(--layout-flex);
+      }
+      .style-dropdown {
+        margin-top: -8px;
+        --paper-input-container-color: var(--text-primary-color);
+        --paper-input-container-focus-color: var(--text-primary-color);
+        --paper-input-container-input-color: var(--text-primary-color);
+      }
+      .clear-search {
+        margin-top: 25px;
+      }
+
+    </style>
+    <!-- Element Markup -->
     <paper-material elevation='3'>
       <paper-toolbar>
         <div class='search-container'>
@@ -63,56 +65,56 @@
       </paper-toolbar>
     </paper-material>
   </template>
-</dom-module>
-
-<script>
-  (function() {
-    Polymer({
-      is: 'yeah-search',
-      /**
-       * element attributes
-       */
-      properties: {
-        searchStr: {
-          type: String,
-          notify: true
-        },
-        keywords: {
-          type: Array,
-          notify: true
-        }
-      },
-      /**
-       *
-       * @private
-       */
-      _searchInputChanged: function() {
-        this.fire('search-input-changed', { value: this.$.txtSearch.value });
-      },
-      /**
-       *
-       * @private
-       */
-      _dropDownClosed: function() {
-        var menuItemList = this.$$('paper-dropdown-menu').children[0].children[1].children[0].children[0].children[0].children[0].children;
-        for (var i = 0; i < menuItemList.length; i++) {
-          if (menuItemList[i].classList.contains('iron-selected')) {
-            var selectedItem = menuItemList[i].innerHTML.trim();
-            this.$.txtSearch.value = selectedItem;
-            this.fire('drop-down-selected-item', { value: selectedItem });
-            break;
+  <!-- Element Logic -->
+  <script>
+    (function() {
+      Polymer({
+        is: 'yeah-search',
+        /**
+         * element attributes
+         */
+        properties: {
+          searchStr: {
+            type: String,
+            notify: true
+          },
+          keywords: {
+            type: Array,
+            notify: true
           }
+        },
+        /**
+         * Fire Event if input value changed
+         * @private
+         */
+        _searchInputChanged: function() {
+          this.fire('search-input-changed', { value: this.$.txtSearch.value });
+        },
+        /**
+         * get selected Item from Drop Down Menu
+         * @private
+         */
+        _dropDownClosed: function() {
+          var menuItemList = this.$$('paper-dropdown-menu').children[0].children[1].children[0].children[0].children[0].children[0].children;
+          for (var i = 0; i < menuItemList.length; i++) {
+            if (menuItemList[i].classList.contains('iron-selected')) {
+              var selectedItem = menuItemList[i].innerHTML.trim();
+              this.$.txtSearch.value = selectedItem;
+              this.fire('drop-down-selected-item', { value: selectedItem });
+              break;
+            }
+          }
+        },
+        /**
+         * Clear Search values
+         * @private
+         */
+        _clearSearch: function() {
+          this.$.txtSearch.value = '';
+          this.$.keywordsDropdown.contentElement.selected = 0;
+          this.fire('clear-search-input-fields');
         }
-      },
-      /**
-       *
-       * @private
-       */
-      _clearSearch: function() {
-        this.$.txtSearch.value = '';
-        this.$.keywordsDropdown.contentElement.selected = 0;
-        this.fire('clear-search-input-fields');
-      }
-    });
-  })();
-</script>
+      });
+    })();
+  </script>
+</dom-module>

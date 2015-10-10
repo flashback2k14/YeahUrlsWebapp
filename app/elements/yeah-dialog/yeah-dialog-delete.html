@@ -19,91 +19,93 @@
       </div>
     </paper-dialog>
   </template>
-</dom-module>
-<!-- Element logic -->
-<script>
-  (function() {
-    Polymer({
-      is: 'yeah-dialog-delete',
-      /**
-       * PROPERTIES
-       */
-      properties: {
-        collection: {
-          type: String,
-          notify: true
+  <!-- Element logic -->
+  <script>
+    (function() {
+      Polymer({
+        is: 'yeah-dialog-delete',
+        /**
+         * PROPERTIES
+         */
+        properties: {
+          collection: {
+            type: String,
+            notify: true
+          },
+          kwCollection: {
+            type: String,
+            notify: true
+          },
+          route: {
+            type: String,
+            notify: true
+          },
+          context: {
+            type: Object
+          },
+          item: {
+            type: Object
+          },
+          positionInCollection: {
+            type: Number
+          }
         },
-        kwCollection: {
-          type: String,
-          notify: true
-        },
-        route: {
-          type: String,
-          notify: true
-        },
-        context: {
-          type: Object
-        },
-        item: {
-          type: Object
-        },
-        positionInCollection: {
-          type: Number
-        }
-      },
-      /**
-       * PRIVATE FUNCTIONS
-       */
-      /**
-       * remove selected item from Firebase
-       * @param e
-       */
-      _remove: function() {
-        if (UserInfo.isLoginExpired(UserInfo.get(UserInfo.EXPIREDATE))) {
-          this.fire('login-expired');
-          return;
-        }
+        /**
+         * PRIVATE FUNCTIONS
+         */
+        /**
+         * remove selected item from Firebase
+         * @private
+         */
+        _remove: function() {
+          let userInfo = new UserInfo();
 
-        var userId = UserInfo.get(UserInfo.USERID);
-        var id = (this.item.id - 1);
-        var objId = this.item.objId;
-        var posInColl = this.positionInCollection;
+          if (userInfo.isLoginExpired(userInfo.getInfo(userInfo.expireDate))) {
+            this.fire('login-expired');
+            return;
+          }
 
-        new FirebaseDAO(this.context, userId).removeItemFromCollection(this.route, id, objId)
-          .then(function(obj) {
-            if (posInColl === -1) {
-              this.context.arrayDelete(this.kwCollection, this.item.keywords);
-              this.fire('delete-item-successful', obj);
-            } else {
-              var arr = this.context.get(this.collection)[posInColl];
-              if (typeof arr === 'undefined') {
+          let userId = userInfo.getInfo(userInfo.userId);
+          let id = (this.item.id - 1);
+          let objId = this.item.objId;
+          let posInColl = this.positionInCollection;
+
+          new FirebaseDAO(this.context, userId).removeItemFromCollection(this.route, id, objId)
+            .then(function(obj) {
+              if (posInColl === -1) {
                 this.context.arrayDelete(this.kwCollection, this.item.keywords);
                 this.fire('delete-item-successful', obj);
+              } else {
+                let arr = this.context.get(this.collection)[posInColl];
+                if (typeof arr === 'undefined') {
+                  this.context.arrayDelete(this.kwCollection, this.item.keywords);
+                  this.fire('delete-item-successful', obj);
+                }
               }
-            }
-            this.fire('delete-item-successful', obj);
-          }.bind(this))
-          .catch(function(err) {
-            this.fire('delete-item-failed', err);
-          }.bind(this));
-      },
-      /**
-       * PUBLIC FUNCTIONS
-       */
-      /**
-       * Open Dialog
-       * @param ctx
-       * @param i item to delete
-       * @param posInColl item position in collection array
-       */
-      toggleDialog: function(ctx, i, posInColl) {
-        if (ctx !== undefined && i !== undefined && posInColl !== undefined) {
-          this.context = ctx;
-          this.item = i;
-          this.positionInCollection = posInColl;
+              this.fire('delete-item-successful', obj);
+            }.bind(this))
+            .catch(function(err) {
+              this.fire('delete-item-failed', err);
+            }.bind(this));
+        },
+        /**
+         * PUBLIC FUNCTIONS
+         */
+        /**
+         * Open Dialog
+         * @param ctx
+         * @param i item to delete
+         * @param posInColl item position in collection array
+         */
+        toggleDialog: function(ctx, i, posInColl) {
+          if (ctx !== undefined && i !== undefined && posInColl !== undefined) {
+            this.context = ctx;
+            this.item = i;
+            this.positionInCollection = posInColl;
+          }
+          this.$.confirmDeleteDialog.toggle()
         }
-        this.$.confirmDeleteDialog.toggle()
-      }
-    });
-  })();
-</script>
+      });
+    })();
+  </script>
+</dom-module>

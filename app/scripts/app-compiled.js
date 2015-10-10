@@ -6,29 +6,31 @@ The complete set of contributors may be found at http://polymer.github.io/CONTRI
 Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 */
-(function(document) {
+'use strict';
+
+(function (document) {
   'use strict';
 
-  let app = document.querySelector('#app');
+  var app = document.querySelector('#app');
 
-  let docReady = false;
-  let tbUsername = null;
-  let tbUserEmailAddress = null;
-  let imgUserProfilePicture = null;
-  let menuItemLogin = null;
-  let menuItemUrls = null;
-  let menuItemNotes = null;
-  let infoToast = null;
-  let elUrls = null;
-  let elNotes = null;
+  var docReady = false;
+  var tbUsername = null;
+  var tbUserEmailAddress = null;
+  var imgUserProfilePicture = null;
+  var menuItemLogin = null;
+  var menuItemUrls = null;
+  var menuItemNotes = null;
+  var infoToast = null;
+  var elUrls = null;
+  var elNotes = null;
 
-  let userInfo = null;
+  var userInfo = null;
 
-  app.addEventListener('dom-change', () => {
+  app.addEventListener('dom-change', function () {
     console.log('Yeah! URLs Webapp is ready to perform awesome stuff!');
   });
 
-  window.addEventListener('WebComponentsReady', () => {
+  window.addEventListener('WebComponentsReady', function () {
     docReady = true;
     // init UserInfo
     userInfo = new UserInfo();
@@ -59,16 +61,16 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
   });
 
-  app.handleLoginSuccessful = e => {
+  app.handleLoginSuccessful = function (e) {
     // declare variable
-    let userObj;
-    let userName;
-    let userEmailAddress;
-    let userProfilePicture;
+    var userObj = undefined;
+    var userName = undefined;
+    var userEmailAddress = undefined;
+    var userProfilePicture = undefined;
     // init variable
     userObj = e.detail;
     // get emailaddress, username, profileUrl
-    switch(userObj.provider) {
+    switch (userObj.provider) {
       case 'password':
         userEmailAddress = userObj.password.email;
         userName = UserInfo.getUsernameFromMailAddress(userEmailAddress);
@@ -96,43 +98,39 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     Util.showToast(infoToast, 'User ' + userEmailAddress + ' is logged in!', '#2EB82E', '#EEEEEE');
   };
 
-  app.handleLoginFailed = e => {
+  app.handleLoginFailed = function (e) {
     // show toast to inform the user
-    let errorObj = e.detail;
+    var errorObj = e.detail;
     Util.showToast(infoToast, 'Login failed! Please retry! Error Code: ' + errorObj.code + ', Error: ' + errorObj.message, '#FF3333', '#EEEEEE');
   };
 
-  app.handleLoginExpired = () => {
+  app.handleLoginExpired = function () {
     Util.showToast(infoToast, 'Login is expired! Please log in!', '#FF3333', '#EEEEEE');
     // go to login page
     app.route = 'login';
   };
 
-  app.handleEditItemSuccessful = e => {
-    let successObj = e.detail.detail;
-    if (successObj)
-      Util.showToast(infoToast, 'URL Item ' + successObj.value + '.', '#2EB82E', '#EEEEEE');
+  app.handleEditItemSuccessful = function (e) {
+    var successObj = e.detail.detail;
+    if (successObj) Util.showToast(infoToast, 'URL Item ' + successObj.value + '.', '#2EB82E', '#EEEEEE');
   };
 
-  app.handleEditItemFailed = e => {
-    let errorObj = e.detail.detail;
-    if (errorObj)
-      Util.showToast(infoToast, 'Edit URL Item is failed! Error: ' + errorObj.value, '#FF3333', '#EEEEEE');
+  app.handleEditItemFailed = function (e) {
+    var errorObj = e.detail.detail;
+    if (errorObj) Util.showToast(infoToast, 'Edit URL Item is failed! Error: ' + errorObj.value, '#FF3333', '#EEEEEE');
   };
 
-  app.handleRemoveItemSuccessful = e => {
-    let successObj = e.detail.detail;
-    if (successObj)
-      Util.showToast(infoToast, 'URL Item ' + successObj.value + '.', '#2EB82E', '#EEEEEE');
+  app.handleRemoveItemSuccessful = function (e) {
+    var successObj = e.detail.detail;
+    if (successObj) Util.showToast(infoToast, 'URL Item ' + successObj.value + '.', '#2EB82E', '#EEEEEE');
   };
 
-  app.handleRemoveItemFailed = e => {
-    let errorObj = e.detail.detail;
-    if (errorObj)
-      Util.showToast(infoToast, 'Remove URL Item is failed! Error: ' + errorObj.value, '#FF3333', '#EEEEEE');
+  app.handleRemoveItemFailed = function (e) {
+    var errorObj = e.detail.detail;
+    if (errorObj) Util.showToast(infoToast, 'Remove URL Item is failed! Error: ' + errorObj.value, '#FF3333', '#EEEEEE');
   };
 
-  app.logoutUser = () => {
+  app.logoutUser = function () {
     Util.showToast(infoToast, 'Logging out...', '#333333', '#EEEEEE');
     // log user out
     Auth.logout();
@@ -150,8 +148,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     app.route = 'login';
   };
 
-  app.onMenuSelect = () => {
-    let drawerPanel = document.querySelector('#paperDrawerPanel');
+  app.onMenuSelect = function () {
+    var drawerPanel = document.querySelector('#paperDrawerPanel');
     if (docReady) {
       if (drawerPanel.narrow) {
         drawerPanel.closeDrawer();
@@ -159,3 +157,5 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     }
   };
 })(document);
+
+//# sourceMappingURL=app-compiled.js.map

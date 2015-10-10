@@ -67,22 +67,27 @@
       <p><strong>{{item.keywords}}</strong></p>
     </paper-material>
   </template>
-</dom-module>
-
-<script>
-  (function() {
-    Polymer({
-      is: 'yeah-listitem',
+  <!-- Element Logic -->
+  <script>
+    /**
+     * Element Class
+     */
+    class YeahListItem {
       /**
-       * PROPERTIES
+       * INIT ELEMENT
        */
-      properties: {
-        item: {
-          type: Object,
-          value: {},
-          notify: true
-        }
-      },
+      beforeRegister() {
+        // ELEMENT NAME
+        this.is = 'yeah-listitem';
+        //PROPERTIES
+        this.properties = {
+          item: {
+            type: Object,
+            value: {},
+            notify: true
+          }
+        };
+      }
       /**
        * PRIVATE FUNCTIONS
        */
@@ -93,37 +98,40 @@
        * @param title
        * @private
        */
-      _computeTitle: function(date, time, title) {
+      _computeTitle(date, time, title) {
         if (typeof date === 'undefined' && typeof time === 'undefined') {
           this.itemTitle = title;
         } else {
           this.itemTitle = 'Date: ' + date + ', ' + time;
         }
-      },
+      }
       /**
        * Open Edit Dialog
        * @param e
        * @private
        */
-      _openEditDialog: function(e) {
+      _openEditDialog(e) {
         this.fire('open-edit-dialog', e);
-      },
+      }
       /**
        * Open Delete Dialog
        * @param e
        * @private
        */
-      _openDeleteDialog: function(e) {
+      _openDeleteDialog(e) {
         this.fire('open-delete-dialog', e);
-      },
-
+      }
       /**
        * PUBLIC FUNCTIONS
        * Set Title
        */
-      ready: function() {
+      ready() {
         this._computeTitle(this.item.date, this.item.time, this.item.title);
       }
-    });
-  })();
-</script>
+    }
+    /**
+     * Register Class
+     */
+    Polymer(YeahListItem);
+  </script>
+</dom-module>
