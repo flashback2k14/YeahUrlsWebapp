@@ -49,7 +49,7 @@
       <template id='templateOverview' is='dom-repeat' items='{{collection}}' as='userObj'>
         <div id='collectionAllCard' class='style-all-cards'>
           <template is='dom-repeat' items='{{userObj}}' as='item'>
-            <template is='dom-if' if='{{_hasItemId(item)}}'>
+            <template is='dom-if' if='{{_hasItemId(item)}}' restamp='true'>
               <template is='dom-if' if='{{_searchForItems(item, searchString)}}'>
                 <!-- List Item -->
                 <yeah-listitem

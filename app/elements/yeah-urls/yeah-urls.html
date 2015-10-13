@@ -167,8 +167,7 @@
           return;
         }
         var id = UserInfo.get(UserInfo.USERID);
-        var fbdaoUrls = new FirebaseDAO(this, id);
-        fbdaoUrls.loadCollections('/urlcollector', 'urlCollection', 'keywordCollection');
+        new FirebaseDAO(this, id).loadCollections('/urlcollector', 'urlCollection', 'keywordCollection');
       },
       /**
        * clear URL listview

@@ -1,6 +1,6 @@
 {
   "name": "yeah-urls-webapp",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Yeah! URLs Webapp",
   "authors": [
     "flashback2k14"
@@ -14,7 +14,7 @@
   "homepage": "https://github.com/flashback2k14/YeahUrlsWebapp",
   "ignore": [],
   "dependencies": {
-    "polymer": "Polymer/polymer#^1.1.0",
+    "polymer": "Polymer/polymer#^1.1.5",
     "iron-elements": "PolymerElements/iron-elements#1.0.4",
     "paper-elements": "PolymerElements/paper-elements#1.0.5",
     "neon-elements": "PolymerElements/neon-elements#1.0.0",

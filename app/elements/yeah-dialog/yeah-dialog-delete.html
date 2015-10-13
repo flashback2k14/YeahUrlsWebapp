@@ -81,6 +81,8 @@
                 this.fire('delete-item-successful', obj);
               }
             }
+            //var arrColl = this.context.get(this.collection)[posInColl];
+            //this.context.splice(arrColl, id, 1);
             this.fire('delete-item-successful', obj);
           }.bind(this))
           .catch(function(err) {

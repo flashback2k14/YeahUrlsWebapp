@@ -167,8 +167,7 @@
           return;
         }
         var id = UserInfo.get(UserInfo.USERID);
-        var fbdaoNotes = new FirebaseDAO(this, id);
-        fbdaoNotes.loadCollections('/notescollector', 'notesCollection', 'notesKeywordCollection');
+        new FirebaseDAO(this, id).loadCollections('/notescollector', 'notesCollection', 'notesKeywordCollection');
       },
       /**
        * clear URL listview
