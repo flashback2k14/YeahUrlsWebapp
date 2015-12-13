@@ -61,7 +61,7 @@
        * @private
        */
       _handleLoginExpired: function() {
-        this.$.elDeleteDialog.toggleDialog();
+        this.$.elDeleteNotesDialog.toggleDialog();
         this.fire('login-expired');
       },
 
@@ -74,7 +74,7 @@
        * @private
        */
       _handleEditItemSuccessful: function(e) {
-        this.$.elEditDialog.toggleDialog();
+        this.$.elEditNotesDialog.toggleDialog();
         this.fire('edit-item-successful', e);
       },
       /**
@@ -83,7 +83,7 @@
        * @private
        */
       _handleEditItemFailed: function(e) {
-        this.$.elEditDialog.toggleDialog();
+        this.$.elEditNotesDialog.toggleDialog();
         this.fire('edit-item-failed', e);
       },
 
@@ -96,7 +96,7 @@
        * @private
        */
       _handleDeleteItemSuccessful: function(e) {
-        this.$.elDeleteDialog.toggleDialog();
+        this.$.elDeleteNotesDialog.toggleDialog();
         this.fire('remove-item-successful', e);
       },
       /**
@@ -105,7 +105,7 @@
        * @private
        */
       _handleDeleteItemFailed: function(e) {
-        this.$.elDeleteDialog.toggleDialog();
+        this.$.elDeleteNotesDialog.toggleDialog();
         this.fire('remove-item-failed', e);
       },
 
