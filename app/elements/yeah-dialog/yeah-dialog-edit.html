@@ -53,6 +53,10 @@
           type: String,
           notify: true
         },
+        itemType: {
+          type: String,
+          notify: true
+        },
         context: {
           type: Object
         },
@@ -73,20 +77,27 @@
           return;
         }
 
+        var editItem = {};
         var userId = UserInfo.get(UserInfo.USERID);
         var id = (this.item.id - 1);
         var objId = this.item.objId;
         var t = new Date(Date.now());
 
-        var editItem = {
-          'date': t.toLocaleDateString(),
-          'id': this.item.id,
-          'keywords': this.$.txtKeywords.value,
-          'objId': this.item.objId,
-          'time': t.toLocaleTimeString(),
-          'timestamp': t,
-          'value': this.$.txtValue.value
-        };
+        if (this.itemType === 'urls') {
+          editItem.date = t.toLocaleDateString();
+          editItem.id = this.item.id;
+          editItem.keywords = this.$.txtKeywords.value;
+          editItem.objId = this.item.objId;
+          editItem.time = t.toLocaleTimeString();
+          editItem.timestamp = Math.round(Date.now() / 1000);
+          editItem.value = this.$.txtValue.value;
+        } else {
+          editItem.id = this.item.id;
+          editItem.keywords = this.$.txtKeywords.value;
+          editItem.objId = this.item.objId;
+          editItem.timestamp = Math.round(Date.now() / 1000);
+          editItem.value = this.$.txtValue.value;
+        }
 
         new FirebaseDAO(this.context, userId).editItemFromCollection(this.route, id, objId, editItem)
           .then(function(obj) {
