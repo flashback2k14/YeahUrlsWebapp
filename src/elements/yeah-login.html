@@ -1,0 +1,25 @@
+<link rel="import" href="../yeah-imports.html">
+
+<dom-module id="yeah-login">
+  <template>
+    <style include="shared-styles">
+      :host {
+        display: block;
+        padding: 10px;
+      }
+    </style>
+
+    <div class="card">
+      <div class="circle">1</div>
+      <h1>Login</h1>
+      <p>ToDo</p>
+    </div>
+  </template>
+
+  <script>
+    class YeahLogin extends Polymer.Element {
+      static get is() { return "yeah-login"; }
+    }
+    window.customElements.define(YeahLogin.is, YeahLogin);
+  </script>
+</dom-module>

@@ -1,0 +1,258 @@
+<dom-module id="app-styles">
+  <template>
+    <style>
+      /* Application theme */
+      :root {
+        --primary-background-color: #353535;
+        --background-color:         #081E3F;
+
+        --dark-primary-color:       #083D56;
+        --default-primary-color:    #0E5F76;
+        --light-primary-color:      #7DB9B3;
+
+        --text-primary-color:       #F4F4F4;
+        --accent-color:             #53C0A2;
+
+        --primary-text-color:       #F4F4F4;
+        --secondary-text-color:     #727272;
+
+        --disabled-text-color:      #BDBDBD;
+        --divider-color:            #D8D7C3;
+
+        /* Components */
+        /* paper-drawer-panel */
+        --drawer-menu-color:            var(--background-color);
+        --drawer-border-color:          1px solid var(--dark-primary-color);
+        --drawer-toolbar-border-color:  1px solid var(--dark-background-color);
+        /* paper-menu */
+        --paper-menu-background-color:  var(--background-color);
+        --menu-link-color:              var(--light-primary-color);
+      }
+
+      /* General styles */
+      paper-material {
+        border-radius: 4px;
+        height: 100%;
+        width: calc(98.66% - 16px);
+        margin: 16px auto;
+        background: var(--divider-color);
+      }
+
+      paper-menu iron-icon {
+        margin-right: 33px;
+        opacity: 0.54;
+      }
+
+      .paper-menu > .iron-selected {
+        color: var(--accent-color);
+      }
+
+      paper-menu a {
+        text-decoration: none;
+        color: var(--menu-link-color);
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -ms-flex-direction: row;
+        -webkit-flex-direction: row;
+        flex-direction: row;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+        font-family: 'Roboto', 'Noto', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 24px;
+        min-height: 48px;
+        padding: 0 16px;
+      }
+
+      #paperSidebarPanel {
+        background-color: var(--background-color);
+      }
+
+      #mainToolbar .middle {
+        margin-left: 48px;
+      }
+
+      #mainToolbar.has-shadow .middle {
+        font-size: 20px;
+        padding-bottom: 0;
+        margin-left: 48px;
+      }
+
+      .paper-font-display1 {
+        font-size: 18px;
+      }
+
+      /* Custom index.html elements */
+      #pmLogin {
+        margin-top: 100px;
+        width: 340px;
+        height: 280px;
+      }
+
+      #elLogin {
+        width: 300px;
+        height: 300px;
+        margin: 0;
+        padding: 0;
+      }
+
+      #pmUrls {
+        height: 80%;
+        max-height: 85%;
+      }
+
+      #pmNotes {
+        height: 80%;
+        max-height: 85%;
+      }
+
+      /* Custom Toolbar Menu */
+      .user-info-container {
+        margin: 45px 10px 10px 10px;
+      }
+      .user-info-picture {
+        padding: 5px;
+      }
+      .user-info-username {
+        padding: 5px;
+        font-size: medium;
+      }
+      .user-info-emailaddress{
+        padding: 5px;
+        font-size: x-small;
+        word-break: break-all;
+      }
+      .circular {
+        display: inline-block;
+        min-height: 80px;
+        height: 80px;
+        max-height: 80px;
+        min-width: 80px;
+        width: 80px;
+        max-width: 80px;
+        overflow: hidden;
+        -webkit-border-radius: 40px;
+        -moz-border-radius: 40px;
+        border-radius: 50%;
+        -webkit-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+        -moz-box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+        box-shadow: 0 0 8px rgba(0, 0, 0, .8);
+      }
+
+      /* Show / Hide Menu Items */
+      .hide-menu-item {
+        display: none;
+      }
+      .show-menu-item {
+        display: flex;
+        padding: 0 16px;
+        line-height: 24px;
+        min-height: 48px;
+      }
+
+      /* Height of the scroll area */
+      .content {
+        height: 800px;
+      }
+
+      /* Breakpoints */
+      /* Material Design Adaptive Breakpoints */
+      /* Small */
+      @media (max-width: 600px) {
+        .paper-font-display1 {
+          font-size: 18px;
+        }
+        .app-name {
+          font-size: 26px;
+        }
+        .bg {
+          background: white;
+        }
+        #drawer .paper-toolbar {
+          margin-left: 16px;
+        }
+        #overlay {
+          min-width: 360px;
+        }
+        paper-material {
+          width: calc(97.33% - 32px);
+        }
+      }
+      /* Tablet+ */
+      @media (min-width: 601px) {
+        paper-material {
+          width: calc(98% - 46px);
+        }
+        #drawer.paper-drawer-panel > [drawer] {
+          border-right: 1px solid rgba(0, 0, 0, 0.14);
+        }
+        iron-pages {
+          padding: 48px 62px;
+        }
+      }
+      /* mobile-small */
+      @media all and (min-width: 0) and (max-width: 360px) and (orientation: portrait) {
+        .paper-font-display1 {
+          font-size: 18px;
+        }
+        .user-info-container {
+          margin: 25px 10px 10px 0;
+        }
+        .content {
+          height: 580px;
+        }
+        #pmUrls {
+          height: 550px;
+        }
+        #pmNotes {
+          height: 550px;
+        }
+      }
+      /* mobile-large */
+      @media all and (min-width: 361px) and (orientation: portrait) { }
+      /* mobile-small-landscape */
+      @media all and (min-width: 0) and (max-width: 480px) and (orientation: landscape) { }
+      /* mobile-large-landscape */
+      @media all and (min-width: 481px) and (orientation: landscape) { }
+      /* tablet-small-landscape */
+      @media all and (min-width: 600px) and (max-width: 960px) and (orientation: landscape) { }
+      /* tablet-large-landscape */
+      @media all and (min-width: 961px) and (orientation: landscape) { }
+      /* tablet-small */
+      @media all and (min-width: 600px) and (orientation: portrait) { }
+      /* tablet-large */
+      @media all and (min-width: 601px) and (max-width: 840px) and (orientation : portrait) { }
+      /* desktop-x-small-landscape */
+      @media all and (min-width: 0) and (max-width: 480px) and (orientation: landscape) { }
+      /* desktop-x-small */
+      @media all and (min-width: 0) and (max-width: 480px) and (max-aspect-ratio: 4/3) { }
+      /* desktop-small-landscape */
+      @media all and (min-width: 481px) and (max-width: 840px) and (orientation: landscape) { }
+      /* desktop-small */
+      @media all and (min-width: 481px) and (max-width: 840px) and (max-aspect-ratio: 4/3) { }
+      /* desktop-medium-landscape */
+      @media all and (min-width: 841px) and (max-width: 1280px) and (orientation: landscape) { }
+      /* desktop-medium */
+      @media all and (min-width: 841px) and (max-width: 1280px) and (max-aspect-ratio: 4/3) { }
+      /* desktop-large */
+      @media all and (min-width: 1281px) and (max-width: 1600px) { }
+      /* desktop-xlarge */
+      @media all and (min-width: 1601px) and (max-width: 1920px) {
+        #pmUrls {
+          height: 820px;
+        }
+        #pmNotes {
+          height: 820px;
+        }
+        .content {
+          height: 900px;
+        }
+      }
+    </style>
+  </template>
+</dom-module>

@@ -1,5 +1,3 @@
-node_modules
-bower_components
-dist
-.tmp
-.idea
+bower_components/
+build/
+node_modules/

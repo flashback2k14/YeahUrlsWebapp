@@ -1,0 +1,27 @@
+<link rel="import" href="../yeah-imports.html">
+
+<dom-module id="yeah-404">
+  <template>
+    <style>
+      :host {
+        display: block;
+        padding: 10px 20px;
+      }
+    </style>
+    Oops you hit a 404. <a href="[[rootPath]]">Head back to home.</a>
+  </template>
+
+  <script>
+    class Yeah404 extends Polymer.Element {
+      static get is() { return "yeah-404"; }
+      static get properties() {
+        return {
+          // This shouldn't be neccessary, but the Analyzer isn't picking up
+          // Polymer.Element#rootPath
+          rootPath: String
+        };
+      }
+    }
+    window.customElements.define(Yeah404.is, Yeah404);
+  </script>
+</dom-module>

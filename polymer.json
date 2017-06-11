@@ -1,0 +1,22 @@
+{
+  "entrypoint": "index.html",
+  "shell": "src/elements/yeah-app.html",
+  "fragments": [
+    "src/elements/yeah-login.html",
+    "src/elements/yeah-urls.html",
+    "src/elements/yeah-notes.html",
+    "src/elements/yeah-404.html"
+  ],
+  "sources": [
+    "src/**/*",
+    "images/**/*",
+    "bower.json"
+  ],
+  "extraDependencies": [
+    "manifest.json",
+    "bower_components/webcomponentsjs/*.js"
+  ],
+  "lint": {
+    "rules": ["polymer-2"]
+  }
+}
